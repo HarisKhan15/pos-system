@@ -10,11 +10,6 @@ public class CompleteTransactionUI {
         JFrame frame = new JFrame("POS System");
         frame.getContentPane().setBackground(Color.LIGHT_GRAY);
 
-        UUID uuid = UUID.randomUUID();
-        JLabel transactionIdLbl = new JLabel("Bill No : "+String.valueOf(uuid));
-        transactionIdLbl.setBounds(30,80,450,20);
-        transactionIdLbl.setFont(new Font("Serif", Font.PLAIN, 20));
-
         JLabel totalAmountLbl=new JLabel("Total amount :  "+totalAmount.toString());
         totalAmountLbl.setBounds(30,130,450,20);
         totalAmountLbl.setFont(new Font("Serif", Font.PLAIN, 20));
@@ -42,7 +37,7 @@ public class CompleteTransactionUI {
             new UserTransactionUI();
 
         });
-        frame.add(transactionIdLbl);
+
         frame.add(totalAmountLbl);
         frame.add(receivedAmountLbl);
         frame.add(receivedAmountTf);
