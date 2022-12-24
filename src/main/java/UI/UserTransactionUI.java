@@ -5,6 +5,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class UserTransactionUI {
+    public static void main(String[] args) {
+        new UserTransactionUI();
+    }
 
     public UserTransactionUI(){
         JFrame frame = new JFrame("POS System");
