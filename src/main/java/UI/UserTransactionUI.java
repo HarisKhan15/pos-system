@@ -67,6 +67,7 @@ public class UserTransactionUI {
         totalBillLbl.setBounds(30,480,150,20);
         totalBillLbl.setFont(new Font("Serif", Font.PLAIN, 20));
         Integer amount = 330;
+
         JLabel amountLbl = new JLabel(amount.toString());
         amountLbl.setBounds(130,470,100,40);
         amountLbl.setFont(new Font("Serif", Font.PLAIN, 20));
