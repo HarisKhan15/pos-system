@@ -5,6 +5,9 @@ import java.awt.*;
 import java.util.*;
 
 public class CompleteTransactionUI {
+    public static void main(String[] args) {
+
+    }
 
     public CompleteTransactionUI(Integer totalAmount){
         JFrame frame = new JFrame("POS System");
