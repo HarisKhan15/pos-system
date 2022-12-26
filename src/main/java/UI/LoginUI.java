@@ -15,16 +15,19 @@ public class LoginUI {
         JTextField usernameTf = new JTextField();
         usernameTf.setBounds(250,132,150,20);
 
-        JTextField passwordTf = new JTextField();
+        JPasswordField passwordTf = new JPasswordField();
         passwordTf.setBounds(250,182,150,20);
 
         JButton loginBtn = new JButton("Login");
         loginBtn.setBounds(200,220,100,20);
 
         loginBtn.addActionListener(e ->{
-
             if(usernameTf.getText().equalsIgnoreCase("admin")&&passwordTf.getText().equalsIgnoreCase("admin")){
-                JOptionPane.showMessageDialog(frame,"sami successful");
+                JOptionPane.showMessageDialog(frame,"Login successful");
+                frame.dispose();
+                new AdminUI();
+            }if(usernameTf.getText().equalsIgnoreCase("haris")&&passwordTf.getText().equalsIgnoreCase("haris")){
+                JOptionPane.showMessageDialog(frame,"Login successful");
                 frame.dispose();
                 new UserTransactionUI();
             }
