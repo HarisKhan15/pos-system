@@ -1,6 +1,7 @@
 package UI;
 
 import javax.swing.*;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
@@ -28,15 +29,16 @@ public class UserTransactionUI {
         JTextField searchBarTf = new JTextField("Search Product");
         searchBarTf.setBounds(75,100,350,20);
 
-        String[][] dataFromDatabase = {{"ABCDE","Pepsi","small","50"},
-                            {"ABCDR","Pepsi","Medium","100"},
-                            {"ABCDT","Pepsi","Large","150"},
-                            {"ADDSA","Tuc biscuits","Medium","30"}};
-        String[] productColumn = {"Product ID","Product name","Product variant","Price"};
+        String[][] dataFromDatabase = {{"Pepsi","500ml","Soft Drink","60","10"},
+                {"Pepsi","500ml","Soft Drink","60","10"},
+                {"Pepsi","500ml","Soft Drink","60","10"},
+                {"Pepsi","500ml","Soft Drink","60","10"}};
+        String[] productColumn = {"Product Name","Product Variant","Product Category","Price","Available Stock"};
         DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         JTable productTable = new JTable(productDtm);
         JScrollPane productSp = new JScrollPane(productTable);
         productSp.setBounds(22,150,455,455);
+
 
         searchAreaPnl.add(logoLbl);
         searchAreaPnl.add(searchBarTf);
@@ -53,33 +55,41 @@ public class UserTransactionUI {
         cartLbl.setFont(new Font("Serif", Font.PLAIN, 30));
         cartLbl.setBounds(160,10,300,50);
 
-        String[][] cartData = {{"ABCDE","Pepsi","small","50"},
-                {"ABCDR","Pepsi","Medium","100"},
-                {"ABCDT","Pepsi","Large","150"},
-                {"ADDSA","Tuc biscuits","Medium","30"}};
-        String[] cartColumn = {"Product ID","Product name","Product variant","Price"};
+        String[][] cartData = {{"Pepsi","500ml","Soft Drink","60","2","120"},
+                {"Pepsi","500ml","Soft Drink","60","2","120"},
+                {"Pepsi","500ml","Soft Drink","60","2","120"},
+                {"Pepsi","500ml","Soft Drink","60","2","120"}};
+        String[] cartColumn = {"Product Name","Product Variant","Product Category","Unit Price","Quantity","Price"};
         DefaultTableModel cartDtm = new DefaultTableModel(cartData,cartColumn);
         JTable cartTable = new JTable(cartDtm);
         JScrollPane cartSp = new JScrollPane(cartTable);
         cartSp.setBounds(18,70,395,380);
 
         JLabel totalBillLbl = new JLabel("Total Bill : ");
-        totalBillLbl.setBounds(30,480,150,20);
+        totalBillLbl.setBounds(30,473,150,20);
         totalBillLbl.setFont(new Font("Serif", Font.PLAIN, 20));
         Integer amount = 330;
 
         JLabel amountLbl = new JLabel(amount.toString());
-        amountLbl.setBounds(130,470,100,40);
+        amountLbl.setBounds(130,470,100,30);
         amountLbl.setFont(new Font("Serif", Font.PLAIN, 20));
         amountLbl.setBorder(BorderFactory.createLineBorder(Color.black,2));
         amountLbl.setBackground(Color.WHITE);
         amountLbl.setOpaque(true);
 
+        JButton addProductBtn = new JButton("Add");
+        addProductBtn.setBounds(250,470,70,30);
+
+        JButton deleteProductBtn = new JButton("Delete");
+        deleteProductBtn.setBounds(340,470,70,30);
+
+
         cartPnl.add(cartLbl);
         cartPnl.add(cartSp);
         cartPnl.add(totalBillLbl);
         cartPnl.add(amountLbl);
-
+        cartPnl.add(addProductBtn);
+        cartPnl.add(deleteProductBtn);
         //Bill
         JPanel billPnl = new JPanel();
         billPnl.setBackground(Color.GRAY);
