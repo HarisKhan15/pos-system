@@ -13,7 +13,7 @@ public class AdminUI {
 
 
         JPanel adminAreaPanel = new JPanel();
-        adminAreaPanel.setBounds(100,100,800,400);
+        adminAreaPanel.setBounds(250,100,800,400);
         adminAreaPanel.setBackground(Color.GRAY);
         adminAreaPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
         adminAreaPanel.setLayout(null);
@@ -26,15 +26,32 @@ public class AdminUI {
 
 
         JButton transactionBtn = new JButton("Transaction");
-        transactionBtn.setBounds(200,100,150,100);
+        transactionBtn.setBounds(100,100,180,100);
+        transactionBtn.addActionListener(e->{
+            new TransactionUI();
+            frame.dispose();
+        });
 
 
         JButton dailyReportBtn = new JButton("Daily Report");
-        dailyReportBtn.setBounds(450,100,150,100);
+        dailyReportBtn.setBounds(300,100,200,100);
+        dailyReportBtn.addActionListener(e->{
+            new DailyReportUi();
+            frame.dispose();
+        });
+
+        JButton categorybtn = new JButton("Add Category");
+        categorybtn.setBounds(520,100,180,100);
+
+
 
 
         JButton addvariantBtn = new JButton("Add/Delete Variant");
         addvariantBtn.setBounds(100,250,180,100);
+        addvariantBtn.addActionListener(e->{
+            new VariantsUI();
+            frame.dispose();
+        });
 
 
         JButton addinventoryBtn = new JButton("Add/Delete Inventory");
@@ -42,8 +59,14 @@ public class AdminUI {
 
         JButton addproductBtn = new JButton("Add/Delete Product");
         addproductBtn.setBounds(520,250,180,100);
+        addproductBtn.addActionListener(e->{
+            new ProductUI();
+        });
+
+
 
         adminAreaPanel.add(adminlogolbl);
+        adminAreaPanel.add(categorybtn);
         adminAreaPanel.add(transactionBtn);
         adminAreaPanel.add(dailyReportBtn);
         adminAreaPanel.add(addproductBtn);
@@ -53,7 +76,7 @@ public class AdminUI {
 
         frame.add(adminAreaPanel);
 
-        frame.setSize(1035,730);
+        frame.setSize(1500,730);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
