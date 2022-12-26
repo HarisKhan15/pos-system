@@ -1,20 +1,27 @@
 package UI;
 
+import domain.Cart;
+import repository.CartRepository;
+import service.CartService;
+
 import javax.swing.*;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 public class UserTransactionUI {
+    CartService cartService = new CartService();
     public static void main(String[] args) {
         new UserTransactionUI();
     }
 
     public UserTransactionUI(){
+        //Creating Frame
         JFrame frame = new JFrame("POS System");
         frame.getContentPane().setBackground(Color.LIGHT_GRAY);
 
-        // Search area
+        // Creating Search area
         JPanel searchAreaPnl = new JPanel();
         searchAreaPnl.setBounds(40,20,500,640);
         searchAreaPnl.setBackground(Color.GRAY);
@@ -29,11 +36,11 @@ public class UserTransactionUI {
         JTextField searchBarTf = new JTextField("Search Product");
         searchBarTf.setBounds(75,100,350,20);
 
-        String[][] dataFromDatabase = {{"Pepsi","500ml","Soft Drink","60","10"},
-                {"Pepsi","500ml","Soft Drink","60","10"},
-                {"Pepsi","500ml","Soft Drink","60","10"},
-                {"Pepsi","500ml","Soft Drink","60","10"}};
-        String[] productColumn = {"Product Name","Product Variant","Product Category","Price","Available Stock"};
+        String[][] dataFromDatabase = {{"1","Pepsi","1","500ml","Soft Drink","60","10"},
+                {"1","tuc","2","500ml","Soft Drink","60","10"},
+                {"1","prince","3","500ml","Soft Drink","60","10"},
+                {"1","gold leaf","4","500ml","Soft Drink","60","10"}};
+        String[] productColumn = {"Product Id","Product Name","Variant Id","Product Variant","Product Category","Price","Available Stock"};
         DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         JTable productTable = new JTable(productDtm);
         JScrollPane productSp = new JScrollPane(productTable);
@@ -55,12 +62,9 @@ public class UserTransactionUI {
         cartLbl.setFont(new Font("Serif", Font.PLAIN, 30));
         cartLbl.setBounds(160,10,300,50);
 
-        String[][] cartData = {{"Pepsi","500ml","Soft Drink","60","2","120"},
-                {"Pepsi","500ml","Soft Drink","60","2","120"},
-                {"Pepsi","500ml","Soft Drink","60","2","120"},
-                {"Pepsi","500ml","Soft Drink","60","2","120"}};
+        String[][] cartData = CartRepository.getAllCartDataForJTable(6);
         String[] cartColumn = {"Product Name","Product Variant","Product Category","Unit Price","Quantity","Price"};
-        DefaultTableModel cartDtm = new DefaultTableModel(cartData,cartColumn);
+        DefaultTableModel cartDtm = new DefaultTableModel(cartData, cartColumn);
         JTable cartTable = new JTable(cartDtm);
         JScrollPane cartSp = new JScrollPane(cartTable);
         cartSp.setBounds(18,70,395,380);
@@ -118,6 +122,25 @@ public class UserTransactionUI {
         logOutBtn.addActionListener(e->{
             frame.dispose();
             new LoginUI();
+        });
+
+        addProductBtn.addActionListener(e->{
+            if(cartTable.getSelectedRow()>-1||productTable.getSelectedRow()<0){
+                return;
+            }
+            String productId = productTable.getValueAt(productTable.getSelectedRow(),0).toString();
+            String productName = productTable.getValueAt(productTable.getSelectedRow(),1).toString();
+            String variantId = productTable.getValueAt(productTable.getSelectedRow(),2).toString();
+            String variantName = productTable.getValueAt(productTable.getSelectedRow(),3).toString();
+            String productCategory = productTable.getValueAt(productTable.getSelectedRow(),4).toString();
+            String unitPrice = productTable.getValueAt(productTable.getSelectedRow(),5).toString();
+
+            Cart cart =new Cart(productId,productName,variantId,variantName,productCategory,unitPrice);
+            if(!cartService.checkCart(cart)){
+                CartRepository.addProductIntoCart(cart);
+            }
+
+
         });
         frame.add(cartPnl);
         frame.add(searchAreaPnl);
