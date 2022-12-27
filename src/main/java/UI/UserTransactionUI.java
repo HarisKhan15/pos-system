@@ -74,7 +74,7 @@ public class UserTransactionUI {
         totalBillLbl.setFont(new Font("Serif", Font.PLAIN, 20));
         Integer amount = 330;
 
-        JLabel amountLbl = new JLabel(amount.toString());
+        JLabel amountLbl = new JLabel(CartRepository.totalAmount().toString());
         amountLbl.setBounds(130,470,100,30);
         amountLbl.setFont(new Font("Serif", Font.PLAIN, 20));
         amountLbl.setBorder(BorderFactory.createLineBorder(Color.black,2));
@@ -136,9 +136,15 @@ public class UserTransactionUI {
             String unitPrice = productTable.getValueAt(productTable.getSelectedRow(),5).toString();
 
             Cart cart =new Cart(productId,productName,variantId,variantName,productCategory,unitPrice);
-            if(!cartService.checkCart(cart)){
+            int x= cartService.checkCart(cart);
+            if(x==-1){
                 CartRepository.addProductIntoCart(cart);
+                cartDtm.addRow(cartService.lastValue());
+            }else{
+                cartDtm.setValueAt(cartService.getUpdatedQuantity(x),x,4);
+                cartDtm.setValueAt(cartService.getUpdatedAmount(x),x,5);
             }
+            amountLbl.setText(CartRepository.totalAmount().toString());
 
 
         });

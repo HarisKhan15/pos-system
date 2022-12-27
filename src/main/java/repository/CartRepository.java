@@ -16,7 +16,16 @@ public class CartRepository {
     public static ArrayList<Cart> getAll(){
         return cartArrayList;
     }
-
+    public static Cart getLastValue(){
+        return cartArrayList.get(cartArrayList.size()-1);
+    }
+    public static Double totalAmount(){
+        Double sum=0.0;
+        for (Cart c:cartArrayList) {
+            sum+=c.getAmount();
+        }
+        return sum;
+    }
     public static String[][] getAllCartDataForJTable(int column){
         String[][] result = new String[cartArrayList.size()][column];
         for (int i = 0; i < cartArrayList.size(); i++) {

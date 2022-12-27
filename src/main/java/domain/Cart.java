@@ -122,6 +122,7 @@ public class Cart {
                 '}';
     }
 
+
     public void increaseQuantity() {
         this.quantity++;
         this.amount+=this.unitPrice;
