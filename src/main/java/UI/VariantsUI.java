@@ -31,10 +31,9 @@ public class VariantsUI {
         Varientlogolbl.setBounds(163,5,400,50);
         Varientlogolbl.setForeground(Color.orange);
 
-        String column[]={"ID","NAME"};
+        String[] column ={"ID","NAME"};
 
-        varientRepository.VarientList();
-        String data[][]= varientRepository.getAllValueForJtabel(column.length);
+        String[][] data= varientRepository.getAllValueForJtabel(column.length);
         DefaultTableModel transactionsDtm = new DefaultTableModel(data,column);
         JTable transactionsTable = new JTable(transactionsDtm);
         JScrollPane transactionsSp = new JScrollPane(transactionsTable);

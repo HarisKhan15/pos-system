@@ -13,7 +13,5 @@ public class VarientServices {
         }
         else {return false;}
 
-
-
     }
 }
