@@ -1,5 +1,7 @@
 package UI;
 
+import repository.CartRepository;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -9,7 +11,7 @@ public class CompleteTransactionUI {
 
     }
 
-    public CompleteTransactionUI(Integer totalAmount){
+    public CompleteTransactionUI(Double totalAmount){
         JFrame frame = new JFrame("POS System");
         frame.getContentPane().setBackground(Color.LIGHT_GRAY);
 
@@ -31,11 +33,12 @@ public class CompleteTransactionUI {
                 JOptionPane.showMessageDialog(frame,"Please Enter received amount!!");
                 return;
             }
-            if(Integer.parseInt(receivedAmountTf.getText())<totalAmount){
+            if(Double.parseDouble(receivedAmountTf.getText())<totalAmount){
                 JOptionPane.showMessageDialog(frame,"Received amount is less than the total bill");
                 return;
             }
             JOptionPane.showMessageDialog(frame,"Transaction Complete");
+            CartRepository.clearList();
             frame.dispose();
             new UserTransactionUI();
 

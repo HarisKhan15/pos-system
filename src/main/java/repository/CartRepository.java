@@ -16,6 +16,9 @@ public class CartRepository {
     public static ArrayList<Cart> getAll(){
         return cartArrayList;
     }
+    public static void removeAllData(){
+        cartArrayList.removeAll(cartArrayList);
+    }
     public static Cart getLastValue(){
         return cartArrayList.get(cartArrayList.size()-1);
     }
@@ -25,6 +28,9 @@ public class CartRepository {
             sum+=c.getAmount();
         }
         return sum;
+    }
+    public static void clearList(){
+        cartArrayList.removeAll(cartArrayList);
     }
     public static String[][] getAllCartDataForJTable(int column){
         String[][] result = new String[cartArrayList.size()][column];
@@ -40,4 +46,11 @@ public class CartRepository {
     }
 
 
+    public static void removeData(int index) {
+        cartArrayList.remove(index);
+    }
+
+    public static Cart getByIndex(int index) {
+        return cartArrayList.get(index);
+    }
 }
