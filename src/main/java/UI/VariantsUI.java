@@ -1,5 +1,7 @@
 package UI;
 
+import repository.VarientRepository;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -7,8 +9,11 @@ import java.awt.*;
 public class VariantsUI {
     public static void main(String[] args) {
         new VariantsUI();
+
     }
+    Integer flag=null;
     public VariantsUI() {
+        VarientRepository varientRepository = new VarientRepository();
         JFrame frame = new JFrame("Products");
 
         JPanel variantAreaPanel = new JPanel();
@@ -26,14 +31,11 @@ public class VariantsUI {
         Varientlogolbl.setBounds(163,5,400,50);
         Varientlogolbl.setForeground(Color.orange);
 
+        String column[]={"ID","NAME"};
 
-
-        String[][] dataFromDatabase = {{"ABCDE","Pepsi","small","50"},
-                {"ABCDR","Pepsi","Medium","100"},
-                {"ABCDT","Pepsi","Large","150"},
-                {"ADDSA","Tuc biscuits","Medium","30"}};
-        String[] productColumn = {"Product ID","Product name","Product variant","Price"};
-        DefaultTableModel transactionsDtm = new DefaultTableModel(dataFromDatabase,productColumn);
+        varientRepository.VarientList();
+        String data[][]= varientRepository.getAllValueForJtabel(column.length);
+        DefaultTableModel transactionsDtm = new DefaultTableModel(data,column);
         JTable transactionsTable = new JTable(transactionsDtm);
         JScrollPane transactionsSp = new JScrollPane(transactionsTable);
         transactionsSp.setBounds(10,60,580,500);
@@ -47,6 +49,11 @@ public class VariantsUI {
         JButton addVarient = new JButton("Add Varient");
         JButton deleteVarient = new JButton("Delete Varient");
         JButton editVarient= new JButton("Edit Varient");
+
+        addVarient.addActionListener(e->{
+            new AddVarientUI();
+            frame.dispose();
+        });
 
         editVarient.addActionListener(e->{
             new EditVariantsUI();
@@ -64,6 +71,7 @@ public class VariantsUI {
         variantAreaPanel.setBackground(Color.GRAY);
         variantAreaPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
         variantAreaPanel.setLayout(null);
+
 
 
         frame.add(optionPanel);
