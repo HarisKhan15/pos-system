@@ -8,8 +8,7 @@ import service.CartService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.AtomicReferenceArray;
+
 
 public class UserTransactionUI {
     CartService cartService = new CartService();
@@ -41,7 +40,7 @@ public class UserTransactionUI {
         JButton searchBtn = new JButton("Search");
         searchBtn.setBounds(390,98,75,25);
 
-        String[] productColumn = {"Product Id","Product Name","Variant Id","Product Variant","Product Category","Price","Available Stock"};
+        String[] productColumn = {"Product Id","Product Name","Variant Id","Variant","Category","Price","Stock"};
         String[][] dataFromDatabase = allProductService.getDataForTable(productColumn.length);
         DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         JTable productTable = new JTable(productDtm);
