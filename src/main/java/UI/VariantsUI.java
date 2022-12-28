@@ -14,7 +14,7 @@ public class VariantsUI {
     Integer flag=null;
     public VariantsUI() {
         VarientRepository varientRepository = new VarientRepository();
-        JFrame frame = new JFrame("Products");
+       JFrame frame = new JFrame("Products");
 
         JPanel variantAreaPanel = new JPanel();
 
@@ -50,12 +50,14 @@ public class VariantsUI {
         JButton editVarient= new JButton("Edit Varient");
 
         addVarient.addActionListener(e->{
-            new AddVarientUI();
+            new AddVarientUI(null);
             frame.dispose();
         });
 
         editVarient.addActionListener(e->{
-            new EditVariantsUI();
+            int index=transactionsTable.getSelectedRow();
+            Object value=transactionsDtm.getValueAt(index,1);
+            new AddVarientUI(value);
             frame.dispose();
 
         });

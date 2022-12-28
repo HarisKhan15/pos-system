@@ -1,6 +1,7 @@
 package UI;
 
 import domain.Varient;
+import repository.VarientRepository;
 import service.VarientServices;
 
 import javax.swing.*;
@@ -8,10 +9,15 @@ import java.awt.*;
 
 public class AddVarientUI {
     public static void main(String[] args) {
-        new AddVarientUI();
+        new AddVarientUI(null);
     }
+    JButton donebtn=null;
+    JLabel varientnamelabel=null;
+    JTextField VarientnameTf =null;
+    JLabel VarientLogoLabel=null;
+
     VarientServices varientServices = new VarientServices();
-    public AddVarientUI() {
+    public AddVarientUI(Object object) {
         JFrame frame = new JFrame("POS SYSTEM");
 
         JPanel addVarientPanel = new JPanel();
@@ -24,37 +30,68 @@ public class AddVarientUI {
             frame.dispose();
         });
 
-        JLabel addVarientLogoLabel =new JLabel("Add Varient ");
-        addVarientLogoLabel.setFont(new Font("Calibri", Font.PLAIN, 50));
-        addVarientLogoLabel.setBounds(150,30,400,50);
-        addVarientLogoLabel.setForeground(Color.orange);
+        if(object!=null){
+             VarientLogoLabel =new JLabel("Edit Varient ");
+            VarientLogoLabel.setFont(new Font("Calibri", Font.PLAIN, 50));
+            VarientLogoLabel.setBounds(150,30,400,50);
+            VarientLogoLabel.setForeground(Color.orange);
 
-        JLabel addvarientnamelabel = new JLabel("Enter Name");
-        addvarientnamelabel.setBounds(100,100,170,40);
-        addvarientnamelabel.setFont(new Font("calibri",Font.BOLD,20));
+            varientnamelabel = new JLabel("Enter Name");
+            varientnamelabel.setBounds(100,100,170,40);
+            varientnamelabel.setFont(new Font("calibri",Font.BOLD,20));
 
-        JTextField addVarientnameTf = new JTextField();
-        addVarientnameTf.setBounds(250,105,170,30);
+            VarientnameTf = new JTextField();
+            VarientnameTf.setText(object.toString());
+            VarientnameTf.setBounds(250,105,170,30);
+            String updated=VarientnameTf.getText();
 
 
-        JButton donebtn = new JButton(new ImageIcon("/home/murtaza/Desktop/POS PROJ/pos-system/src/Assets/done.png"));
-        donebtn.setBounds(280, 190, 90, 40);
+            donebtn = new JButton(new ImageIcon("/home/murtaza/Desktop/POS PROJ/pos-system/src/Assets/done.png"));
+            donebtn.setBounds(280, 190, 90, 40);
 
-        donebtn.addActionListener(e->{
-            Varient vrt =new Varient(addVarientnameTf.getText());
-            if(varientServices.addVarient(vrt)==true){
-                JOptionPane.showMessageDialog(frame, "Varient saved Successfully");
-            }
-            else {
-                JOptionPane.showMessageDialog(frame,"Varient not saved Successfully");
+            donebtn.addActionListener(e->{
+                if(varientServices.update(object.toString(),updated)){
+                    JOptionPane.showMessageDialog(frame, "Varient Updated Successfully");
+                }
+                else {
+                    JOptionPane.showMessageDialog(frame,"Varient not updated Successfully");
 
-            }
-        });
+                }
+            });
+        }else{
+            VarientLogoLabel =new JLabel("add Varient ");
+            VarientLogoLabel.setFont(new Font("Calibri", Font.PLAIN, 50));
+            VarientLogoLabel.setBounds(150,30,400,50);
+            VarientLogoLabel.setForeground(Color.orange);
+            varientnamelabel = new JLabel("Enter Name");
+            varientnamelabel.setBounds(100,100,170,40);
+            varientnamelabel.setFont(new Font("calibri",Font.BOLD,20));
+
+            VarientnameTf = new JTextField();
+            VarientnameTf.setBounds(250,105,170,30);
+
+            donebtn = new JButton(new ImageIcon("/home/murtaza/Desktop/POS PROJ/pos-system/src/Assets/done.png"));
+            donebtn.setBounds(280, 190, 90, 40);
+
+            donebtn.addActionListener(e->{
+                Varient vrt =new Varient(VarientnameTf.getText());
+                if(varientServices.addVarient(vrt)==true){
+                    JOptionPane.showMessageDialog(frame, "Varient saved Successfully");
+                }
+                else {
+                    JOptionPane.showMessageDialog(frame,"Varient not saved Successfully");
+
+                }
+            });
+
+        }
+
+
 
         addVarientPanel.add(donebtn);
-        addVarientPanel.add(addvarientnamelabel);
-        addVarientPanel.add(addVarientnameTf);
-        addVarientPanel.add(addVarientLogoLabel);
+        addVarientPanel.add(varientnamelabel);
+        addVarientPanel.add(VarientnameTf);
+        addVarientPanel.add(VarientLogoLabel);
         addVarientPanel.setBounds(370,50,600,400);
         addVarientPanel.setBackground(Color.GRAY);
         addVarientPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
