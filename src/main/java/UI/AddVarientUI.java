@@ -14,7 +14,10 @@ public class AddVarientUI {
     JButton donebtn=null;
     JLabel varientnamelabel=null;
     JTextField VarientnameTf =null;
+    JTextField VarientnameTf1;
+
     JLabel VarientLogoLabel=null;
+
 
     VarientServices varientServices = new VarientServices();
     public AddVarientUI(Object object) {
@@ -41,16 +44,19 @@ public class AddVarientUI {
             varientnamelabel.setFont(new Font("calibri",Font.BOLD,20));
 
             VarientnameTf = new JTextField();
-            VarientnameTf.setText(object.toString());
             VarientnameTf.setBounds(250,105,170,30);
-            String updated=VarientnameTf.getText();
+            String temp=object.toString();
+
+            VarientnameTf.setText(temp);
+
 
 
             donebtn = new JButton(new ImageIcon("/home/murtaza/Desktop/POS PROJ/pos-system/src/Assets/done.png"));
             donebtn.setBounds(280, 190, 90, 40);
 
             donebtn.addActionListener(e->{
-                if(varientServices.update(object.toString(),updated)){
+                String temp2=VarientnameTf.getText();
+                if(varientServices.update(object.toString(),temp2)){
                     JOptionPane.showMessageDialog(frame, "Varient Updated Successfully");
                 }
                 else {
@@ -89,6 +95,7 @@ public class AddVarientUI {
 
 
         addVarientPanel.add(donebtn);
+
         addVarientPanel.add(varientnamelabel);
         addVarientPanel.add(VarientnameTf);
         addVarientPanel.add(VarientLogoLabel);

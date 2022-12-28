@@ -21,11 +21,11 @@ public class VarientServices {
 
         if(updated.equals(previous)){
             System.out.println("Already equal");
-            return true;
+            return false;
         }
         else {
             varientRepository.updateVarient(previous,updated);
-            return false;}
+            return true;}
 
     }
 }
