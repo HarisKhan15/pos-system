@@ -1,8 +1,11 @@
 package UI;
 
+import service.AuthenticationSerivice;
+
 import javax.swing.*;
 
 public class LoginUI {
+    AuthenticationSerivice authenticationSerivice = new AuthenticationSerivice();
 
     public LoginUI(){
         JFrame frame = new JFrame("POS System");
@@ -22,15 +25,21 @@ public class LoginUI {
         loginBtn.setBounds(200,220,100,20);
 
         loginBtn.addActionListener(e ->{
-            if(usernameTf.getText().equalsIgnoreCase("admin")&&passwordTf.getText().equalsIgnoreCase("admin")){
-                JOptionPane.showMessageDialog(frame,"Login successful");
-                frame.dispose();
-                new AdminUI();
-            }if(usernameTf.getText().equalsIgnoreCase("haris")&&passwordTf.getText().equalsIgnoreCase("haris")){
-                JOptionPane.showMessageDialog(frame,"Login successful");
+            System.out.println(passwordTf.getText());
+            String designation = authenticationSerivice.checkLogin(usernameTf.getText(),passwordTf.getText());
+            if(designation!=null&&designation.equalsIgnoreCase("staff")){
+                JOptionPane.showMessageDialog(frame,"Staff Login successful");
                 frame.dispose();
                 new UserTransactionUI();
+                return;
+            }else if(designation!=null&&designation.equalsIgnoreCase("admin")){
+                JOptionPane.showMessageDialog(frame,"Admin Login successful");
+                frame.dispose();
+                new AdminUI();
+                return;
             }
+            JOptionPane.showMessageDialog(frame,"Login Unsuccessful");
+
             usernameTf.setText("");
             passwordTf.setText("");
         });

@@ -11,6 +11,7 @@ public class Cart {
     private Double unitPrice;
     private Integer quantity;
     private Double amount;
+    private Integer maxQuantity;
 
     public Cart(Integer productId, String productName, Integer variantId, String variantName, String productCategory, Double unitPrice, Integer quantity, Double amount) {
         this.productId = productId;
@@ -23,7 +24,15 @@ public class Cart {
         this.amount = amount;
     }
 
-    public Cart(String productId,String productName,String variantId, String variantName, String productCategory, String unitPrice) {
+    public Integer getMaxQuantity() {
+        return maxQuantity;
+    }
+
+    public void setMaxQuantity(Integer maxQuantity) {
+        this.maxQuantity = maxQuantity;
+    }
+
+    public Cart(String productId, String productName, String variantId, String variantName, String productCategory, String unitPrice, String maxQuantity) {
         this.productId = Integer.parseInt(productId);
         this.productName = productName;
         this.variantId = Integer.parseInt(variantId);
@@ -32,6 +41,7 @@ public class Cart {
         this.unitPrice = Double.parseDouble(unitPrice);
         this.quantity = 1;
         this.amount = this.unitPrice;
+        this.maxQuantity = Integer.parseInt(maxQuantity);
     }
 
     public Integer getProductId() {
@@ -126,5 +136,10 @@ public class Cart {
     public void increaseQuantity() {
         this.quantity++;
         this.amount+=this.unitPrice;
+    }
+
+    public void decreaseQuantity() {
+        this.quantity--;
+        this.amount-=this.unitPrice;
     }
 }

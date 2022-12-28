@@ -2,16 +2,17 @@ package UI;
 
 import domain.Cart;
 import repository.CartRepository;
+import service.AllProductService;
 import service.CartService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.AtomicReferenceArray;
+
 
 public class UserTransactionUI {
     CartService cartService = new CartService();
+    AllProductService allProductService = new AllProductService();
     public static void main(String[] args) {
         new UserTransactionUI();
     }
@@ -34,13 +35,13 @@ public class UserTransactionUI {
         logoLbl.setForeground(Color.orange);
 
         JTextField searchBarTf = new JTextField("Search Product");
-        searchBarTf.setBounds(75,100,350,20);
+        searchBarTf.setBounds(30,100,350,20);
 
-        String[][] dataFromDatabase = {{"1","Pepsi","1","500ml","Soft Drink","60","10"},
-                {"1","tuc","2","500ml","Soft Drink","60","10"},
-                {"1","prince","3","500ml","Soft Drink","60","10"},
-                {"1","gold leaf","4","500ml","Soft Drink","60","10"}};
-        String[] productColumn = {"Product Id","Product Name","Variant Id","Product Variant","Product Category","Price","Available Stock"};
+        JButton searchBtn = new JButton("Search");
+        searchBtn.setBounds(390,98,75,25);
+
+        String[] productColumn = {"Product Id","Product Name","Variant Id","Variant","Category","Price","Stock"};
+        String[][] dataFromDatabase = allProductService.getDataForTable(productColumn.length);
         DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         JTable productTable = new JTable(productDtm);
         JScrollPane productSp = new JScrollPane(productTable);
@@ -48,6 +49,7 @@ public class UserTransactionUI {
 
 
         searchAreaPnl.add(logoLbl);
+        searchAreaPnl.add(searchBtn);
         searchAreaPnl.add(searchBarTf);
         searchAreaPnl.add(productSp);
 
@@ -72,7 +74,6 @@ public class UserTransactionUI {
         JLabel totalBillLbl = new JLabel("Total Bill : ");
         totalBillLbl.setBounds(30,473,150,20);
         totalBillLbl.setFont(new Font("Serif", Font.PLAIN, 20));
-        Integer amount = 330;
 
         JLabel amountLbl = new JLabel(CartRepository.totalAmount().toString());
         amountLbl.setBounds(130,470,100,30);
@@ -113,40 +114,77 @@ public class UserTransactionUI {
         //Button config
         completeTransactionBtn.addActionListener(e->{
             frame.dispose();
-            new CompleteTransactionUI(Integer.parseInt(amountLbl.getText()));
+            new CompleteTransactionUI(Double.parseDouble(amountLbl.getText()));
         });
         cancelTransactionBtn.addActionListener(e->{
+            CartRepository.removeAllData();
             frame.dispose();
             new UserTransactionUI();
         });
         logOutBtn.addActionListener(e->{
+            CartRepository.removeAllData();
             frame.dispose();
             new LoginUI();
         });
 
-        addProductBtn.addActionListener(e->{
-            if(cartTable.getSelectedRow()>-1||productTable.getSelectedRow()<0){
-                return;
-            }
-            String productId = productTable.getValueAt(productTable.getSelectedRow(),0).toString();
-            String productName = productTable.getValueAt(productTable.getSelectedRow(),1).toString();
-            String variantId = productTable.getValueAt(productTable.getSelectedRow(),2).toString();
-            String variantName = productTable.getValueAt(productTable.getSelectedRow(),3).toString();
-            String productCategory = productTable.getValueAt(productTable.getSelectedRow(),4).toString();
-            String unitPrice = productTable.getValueAt(productTable.getSelectedRow(),5).toString();
+        addProductBtn.addActionListener(e-> {
 
-            Cart cart =new Cart(productId,productName,variantId,variantName,productCategory,unitPrice);
-            int x= cartService.checkCart(cart);
-            if(x==-1){
+            String productId = null;
+            String productName = null;
+            String variantId = null;
+            String variantName = null;
+            String productCategory = null;
+            String unitPrice = null;
+            String maxQuantity = null;
+            if (productTable.getSelectedRow() > -1) {
+                productId = productTable.getValueAt(productTable.getSelectedRow(), 0).toString();
+                productName = productTable.getValueAt(productTable.getSelectedRow(), 1).toString();
+                variantId = productTable.getValueAt(productTable.getSelectedRow(), 2).toString();
+                variantName = productTable.getValueAt(productTable.getSelectedRow(), 3).toString();
+                productCategory = productTable.getValueAt(productTable.getSelectedRow(), 4).toString();
+                unitPrice = productTable.getValueAt(productTable.getSelectedRow(), 5).toString();
+                maxQuantity = productTable.getValueAt(productTable.getSelectedRow(), 6).toString();
+            } else if (cartTable.getSelectedRow() > -1) {
+                Cart cart = CartRepository.getAll().get(cartTable.getSelectedRow());
+                productId = cart.getProductId().toString();
+                productName = cart.getProductName();
+                variantId = cart.getVariantId().toString();
+                variantName = cart.getVariantName();
+                productCategory = cart.getProductCategory();
+                unitPrice = cart.getUnitPrice().toString();
+                maxQuantity = cart.getMaxQuantity().toString();
+
+            }
+            Cart cart = new Cart(productId, productName, variantId, variantName, productCategory, unitPrice, maxQuantity);
+            int x = cartService.checkCart(cart,true);
+            if (x == -1) {
                 CartRepository.addProductIntoCart(cart);
                 cartDtm.addRow(cartService.lastValue());
-            }else{
-                cartDtm.setValueAt(cartService.getUpdatedQuantity(x),x,4);
-                cartDtm.setValueAt(cartService.getUpdatedAmount(x),x,5);
+            } else if (x == -3) {
+                JOptionPane.showMessageDialog(frame, "Max Quantity");
+            } else {
+                cartDtm.setValueAt(cartService.getUpdatedQuantity(x), x, 4);
+                cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
             }
             amountLbl.setText(CartRepository.totalAmount().toString());
 
 
+        });
+        deleteProductBtn.addActionListener(e->{
+            if(cartTable.getSelectedRow()<0){
+                return;
+            }
+            Cart cart = CartRepository.getByIndex(cartTable.getSelectedRow());
+
+            int x = cartService.checkCart(cart,false);
+            if (x == -2) {
+                CartRepository.removeData(cartTable.getSelectedRow());
+                cartDtm.removeRow(cartTable.getSelectedRow());
+            } else {
+                cartDtm.setValueAt(cartService.getUpdatedQuantity(cartTable.getSelectedRow()), cartTable.getSelectedRow(), 4);
+                cartDtm.setValueAt(cartService.getUpdatedAmount(cartTable.getSelectedRow()), cartTable.getSelectedRow(), 5);
+            }
+            amountLbl.setText(CartRepository.totalAmount().toString());
         });
         frame.add(cartPnl);
         frame.add(searchAreaPnl);

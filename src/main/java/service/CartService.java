@@ -4,11 +4,22 @@ import domain.Cart;
 import repository.CartRepository;
 
 public class CartService {
-    public int checkCart(Cart cart){
+    public int checkCart(Cart cart,boolean argument){
         for (Cart c: CartRepository.getAll()) {
             if(c.equals(cart)){
-                c.increaseQuantity();
-                return CartRepository.getAll().indexOf(c);
+                if(argument) {
+                    if(c.getMaxQuantity()>c.getQuantity()){
+                        c.increaseQuantity();
+                        return CartRepository.getAll().indexOf(c);
+                    }else {
+                        return -3;
+                    }
+                }else {
+                    if(c.getQuantity()==1){
+                        return -2;
+                    }
+                    c.decreaseQuantity();
+                }
             }
         }
         return -1;
@@ -21,9 +32,9 @@ public class CartService {
         return new String[]{cart.getProductName(),cart.getVariantName(),cart.getProductCategory(),cart.getUnitPrice().toString(),cart.getQuantity().toString(),cart.getAmount().toString()};
     }
     public String getUpdatedQuantity(int x){
-        return CartRepository.getAll().get(x).getQuantity().toString();
+        return CartRepository.getByIndex(x).getQuantity().toString();
     }
     public String getUpdatedAmount(int x){
-        return CartRepository.getAll().get(x).getAmount().toString();
+        return CartRepository.getByIndex(x).getAmount().toString();
     }
 }
