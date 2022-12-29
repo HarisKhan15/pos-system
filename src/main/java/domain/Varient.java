@@ -6,6 +6,7 @@ public class Varient {
     private String varientName;
 
     public Varient(String varientName) {
+
         this.varientName = varientName;
     }
 
