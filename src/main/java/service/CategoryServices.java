@@ -1,19 +1,22 @@
 package service;
 
+import domain.Category;
 import domain.Varient;
+import repository.CategoryRepository;
 import repository.VarientRepository;
 
-public class VarientServices {
-    VarientRepository varientRepository = new VarientRepository();
-    public  boolean addVarient(Varient vrt) {
+public class CategoryServices {
+    CategoryRepository categoryRepository = new CategoryRepository();
+    public  boolean addService(Category cat) {
 
-        if(vrt!=null){
-         varientRepository.insertVarient(vrt.getVarientName());
+        if(cat!=null){
+            categoryRepository.insertCategory(cat.getCategoryName());
             return true;
         }
         else {return false;}
 
     }
+
     public  boolean update(Object previous,String updated) {
 
         if(updated.equals(previous)){
@@ -21,7 +24,7 @@ public class VarientServices {
             return false;
         }
         else {
-            varientRepository.updateVarient(previous,updated);
+            categoryRepository.updateCategory(previous,updated);
             return true;}
 
     }

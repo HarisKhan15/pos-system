@@ -12,14 +12,13 @@ public class VariantsUI {
         new VariantsUI();
 
     }
-    Integer flag=null;
     public VariantsUI() {
         VarientRepository varientRepository = new VarientRepository();
         JFrame frame = new JFrame("Products");
 
         JPanel variantAreaPanel = new JPanel();
 
-        JButton back = new JButton(new ImageIcon("/home/murtaza/Desktop/POS PROJ/pos-system/src/Assets/back_8.png"));
+        JButton back = new JButton(new ImageIcon("back_8.png"));
         back.setBackground(new Color(1, 176, 222));
         back.setBounds(10, 2, 100, 50);
         back.addActionListener(e -> {
