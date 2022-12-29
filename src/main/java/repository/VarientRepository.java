@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class VarientRepository extends BaseConnection{
+
+
     public void insertVarient(String varientName){
         Varient varient =null;
         try {
@@ -42,4 +44,32 @@ public class VarientRepository extends BaseConnection{
         }
         return result;
     }
+    public void updateVarient(Object previous,String updated){
+        Varient varient =null;
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("UPDATE Variant SET variantName = (?) WHERE variantName=(?)");
+            stmt.setString(1,updated);
+            stmt.setString(2,previous.toString());
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+    public void deleteVariantByName(Object toDeleteName){
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Variant WHERE variantName=(?)");
+            stmt.setString(1,toDeleteName.toString());
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
