@@ -1,9 +1,7 @@
 package UI;
 
 import domain.Category;
-import domain.Varient;
 import service.CategoryServices;
-import service.VarientServices;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,6 +58,10 @@ public class AddCategoryUI {
 
                 }
             });
+            addCategoryPanel.add(donebtn);
+            addCategoryPanel.add(categorynamelabel);
+            addCategoryPanel.add(categorynameTf);
+            addCategoryPanel.add(categoryLogoLabel);
         }
         else{
             categoryLogoLabel =new JLabel("add Category ");
@@ -69,7 +71,9 @@ public class AddCategoryUI {
             categoryLogoLabel = new JLabel("Enter Name");
             categoryLogoLabel.setBounds(100,100,170,40);
             categoryLogoLabel.setFont(new Font("calibri",Font.BOLD,20));
-
+            categorynamelabel = new JLabel("Enter Name");
+            categorynamelabel.setBounds(100,100,170,40);
+            categorynamelabel.setFont(new Font("calibri",Font.BOLD,20));
             categorynameTf = new JTextField();
             categorynameTf.setBounds(250,105,170,30);
 
@@ -78,7 +82,7 @@ public class AddCategoryUI {
 
             donebtn.addActionListener(e->{
                 Category cat =new Category(categorynameTf.getText());
-                if(categoryServices.addService(cat)==true){
+                if(categoryServices.addService(cat)){
                     JOptionPane.showMessageDialog(frame, "Category saved Successfully");
                 }
                 else {
@@ -86,16 +90,15 @@ public class AddCategoryUI {
 
                 }
             });
-
+            addCategoryPanel.add(donebtn);
+            addCategoryPanel.add(categorynamelabel);
+            addCategoryPanel.add(categorynameTf);
+            addCategoryPanel.add(categoryLogoLabel);
         }
 
 
 
-        addCategoryPanel.add(donebtn);
 
-        addCategoryPanel.add(categorynamelabel);
-        addCategoryPanel.add(categorynameTf);
-        addCategoryPanel.add(categoryLogoLabel);
         addCategoryPanel.setBounds(370,50,600,400);
         addCategoryPanel.setBackground(Color.GRAY);
         addCategoryPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
