@@ -113,6 +113,10 @@ public class UserTransactionUI {
 
         //Button config
         completeTransactionBtn.addActionListener(e->{
+            if(CartRepository.getAll().isEmpty()){
+                JOptionPane.showMessageDialog(frame,"Cart is Empty !!");
+                return;
+            }
             frame.dispose();
             new CompleteTransactionUI(Double.parseDouble(amountLbl.getText()));
         });

@@ -4,8 +4,7 @@ import domain.Varient;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 
 public class VarientRepository extends BaseConnection{
 

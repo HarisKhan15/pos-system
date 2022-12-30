@@ -37,4 +37,15 @@ public class CartService {
     public String getUpdatedAmount(int x){
         return CartRepository.getByIndex(x).getAmount().toString();
     }
+
+    public void addItemsToDatabase(int transactionId){
+        CartRepository cartRepository = new CartRepository();
+        int productVariantId = -1;
+        for (Cart c:CartRepository.getAll()) {
+            productVariantId = cartRepository.getProductVariantId(c.getProductId(),c.getVariantId());
+            int tempQuantity = c.getMaxQuantity() - c.getQuantity();
+            cartRepository.updateQuantity(productVariantId,tempQuantity);
+            cartRepository.itemIntoDatabase(transactionId,productVariantId,c.getQuantity(),c.getAmount());
+        }
+    }
 }

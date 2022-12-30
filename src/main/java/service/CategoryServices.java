@@ -1,9 +1,7 @@
 package service;
 
 import domain.Category;
-import domain.Varient;
 import repository.CategoryRepository;
-import repository.VarientRepository;
 
 public class CategoryServices {
     CategoryRepository categoryRepository = new CategoryRepository();
