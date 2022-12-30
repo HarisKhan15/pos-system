@@ -1,5 +1,8 @@
 package UI;
 
+import domain.Users;
+import domain.Varient;
+import repository.UserRepository;
 import service.AuthenticationSerivice;
 
 import javax.swing.*;
@@ -10,6 +13,7 @@ public class AddUserUI {
         new AddUserUI();
     }
     AuthenticationSerivice authenticationSerivice = new AuthenticationSerivice();
+    UserRepository userRepository = new UserRepository();
     public AddUserUI() {
         JFrame frame = new JFrame("POS System");
         JLabel userIdlbl=new JLabel("Enter User ID : ");
@@ -24,6 +28,10 @@ public class AddUserUI {
         JLabel userEmailLbl=new JLabel("Enter Email : ");
         userEmailLbl.setBounds(150,280,150,20);
 
+        JLabel userDesignationLbl=new JLabel("Enter Designation : ");
+        userDesignationLbl.setBounds(150,330,150,20);
+
+
 
         JTextField userIdTF = new JTextField();
         userIdTF.setBounds(250,132,150,20);
@@ -37,30 +45,30 @@ public class AddUserUI {
         JTextField UseremailTf = new JTextField();
         UseremailTf.setBounds(250,282,150,20);
 
+        JTextField userDesignationTf = new JTextField();
+        userDesignationTf.setBounds(250,332,150,20);
+
 
         JButton AddUser = new JButton("Add User");
-        AddUser.setBounds(270,332,100,20);
+        AddUser.setBounds(270,382,100,20);
 
 
-//
-//        AddUser.addActionListener(e ->{
-//            boolean UserAvailable = authenticationSerivice.chechUserNameAvaialbllity(userNameTf.getText());
-//            if(designation!=null&&designation.equalsIgnoreCase("staff")){
-//                JOptionPane.showMessageDialog(frame,"Staff Login successful");
-//                frame.dispose();
-//                new UserTransactionUI();
-//                return;
-//            }else if(designation!=null&&designation.equalsIgnoreCase("admin")){
-//                JOptionPane.showMessageDialog(frame,"Admin Login successful");
-//                frame.dispose();
-//                new AdminUI();
-//                return;
-//            }
-//            JOptionPane.showMessageDialog(frame,"Login Unsuccessful");
-//
-//            usernameTf.setText("");
-//            passwordTf.setText("");
-//        });
+
+        AddUser.addActionListener(e ->{
+            if (authenticationSerivice.chechUserNameAvaialbllity(userNameTf.getText())) {
+                JOptionPane.showMessageDialog(frame, "User Already Available");
+            }
+            else{
+                Users user =new Users(userIdTF.getText(),userpassWordTf.getText(),userNameTf.getText(),userDesignationTf.getText(),UseremailTf.getText());
+                if(authenticationSerivice.addUser(user)){
+                    JOptionPane.showMessageDialog(frame, "User added Successfully");
+                }
+
+            }
+                });
+
+
+
         frame.add(userIdlbl);
         frame.add(passwordLbl);
         frame.add(usernameLbl);
@@ -69,6 +77,8 @@ public class AddUserUI {
         frame.add(userpassWordTf);
         frame.add(userNameTf);
         frame.add(UseremailTf);
+        frame.add(userDesignationLbl);
+        frame.add(userDesignationTf);
         frame.add(AddUser);
         frame.setSize(600,600);
         frame.setLocationRelativeTo(null);
