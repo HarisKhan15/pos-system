@@ -11,4 +11,11 @@ public class TransactionService {
         }
         return -1;
     }
+    public String[][] getDataForJTable(){
+        return transactionRepository.getAllTransactionForJTable();
+    }
+
+    public String[][] getSpecificDataForJTable(int transactionId){
+        return transactionRepository.getSpecificTransactionForJTable(transactionId);
+    }
 }

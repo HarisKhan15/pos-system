@@ -4,9 +4,9 @@ import repository.TransactionRepository;
 
 public class DailyReportServices {
     TransactionRepository transactionRepository = new TransactionRepository();
-    public String[][] getDataForTable(int column){
+    public String[][] getDataForTable(){
 
-        return transactionRepository.getAllValueForJtabel(column);
+        return transactionRepository.getAllValueForJtabel();
     }
 
 }

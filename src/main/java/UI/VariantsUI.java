@@ -75,7 +75,10 @@ public class VariantsUI {
             return;
         }
         Object toDeletValue = transactionsDtm.getValueAt(index, 1);
-        varientRepository.deleteVariantByName(toDeletValue);
+        if(!varientRepository.deleteVariantByName(toDeletValue)){
+            JOptionPane.showMessageDialog(frame,"The selected item cannot be deleted because there are some products that are linked to it!!");
+            return;
+        }
         transactionsDtm.removeRow(index);
     });
         optionPanel.add(addVarient);

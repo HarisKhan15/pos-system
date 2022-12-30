@@ -38,7 +38,7 @@ public class DailyReportUi {
 
         String[] DailyReportColumns = {"Transaction ID","UserID","Transaction Date","Total Ammount"};
 
-        String[][] data = transactionServices.getDataForTable(DailyReportColumns.length);
+        String[][] data = transactionServices.getDataForTable();
         DefaultTableModel dailyReportDtm = new DefaultTableModel(data, DailyReportColumns);
         JTable dailyReportPanel = new JTable(dailyReportDtm);
         JScrollPane dailyReportSp = new JScrollPane(dailyReportPanel);

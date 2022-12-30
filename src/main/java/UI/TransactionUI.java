@@ -1,10 +1,13 @@
 package UI;
 
+import service.TransactionService;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class TransactionUI {
+    TransactionService transactionService = new TransactionService();
     public static void main(String[] args) {
         new TransactionUI();
     }
@@ -31,17 +34,30 @@ public class TransactionUI {
 
 
 
-        String[][] dataFromDatabase = {{"ABCDE","Pepsi","small","50"},
-                {"ABCDR","Pepsi","Medium","100"},
-                {"ABCDT","Pepsi","Large","150"},
-                {"ADDSA","Tuc biscuits","Medium","30"}};
-        String[] productColumn = {"Product ID","Product name","Product variant","Price"};
+        String[][] dataFromDatabase = transactionService.getDataForJTable();
+        String[] productColumn = {"Transaction ID","Staff name","Transaction Date","Total amount"};
         DefaultTableModel transactionsDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         JTable transactionsTable = new JTable(transactionsDtm);
         JScrollPane transactionsSp = new JScrollPane(transactionsTable);
-        transactionsSp.setBounds(10,130,580,500);
+        transactionsSp.setBounds(10,130,580,400);
 
 
+        JButton openTransactionBtn = new JButton("Open");
+        openTransactionBtn.setBounds(240,560,100,30);
+
+
+        openTransactionBtn.addActionListener(e->{
+            if(transactionsTable.getSelectedRow()<0){
+                JOptionPane.showMessageDialog(frame,"Please Select any Transaction!!");
+                return;
+            }
+            frame.dispose();
+            Integer transactionId = Integer.valueOf(transactionsTable.getValueAt(transactionsTable.getSelectedRow(),0).toString());
+            new ViewTransactionUI(transactionId);
+        });
+
+
+        transactionPanel.add(openTransactionBtn);
         transactionPanel.add(transactionsSp);
         transactionPanel.add(adminlogolbl);
         transactionPanel.setBounds(350,50,600,640);

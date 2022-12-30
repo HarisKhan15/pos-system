@@ -44,7 +44,6 @@ public class VarientRepository extends BaseConnection{
         return result;
     }
     public void updateVarient(Object previous,String updated){
-        Varient varient =null;
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement("UPDATE Variant SET variantName = (?) WHERE variantName=(?)");
@@ -58,15 +57,15 @@ public class VarientRepository extends BaseConnection{
 
 
     }
-    public void deleteVariantByName(Object toDeleteName){
+    public boolean deleteVariantByName(Object toDeleteName){
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM Variant WHERE variantName=(?)");
             stmt.setString(1,toDeleteName.toString());
             stmt.executeUpdate();
-
+            return true;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return false;
         }
 
     }
