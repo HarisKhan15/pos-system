@@ -25,7 +25,6 @@ public class LoginUI {
         loginBtn.setBounds(200,220,100,20);
 
         loginBtn.addActionListener(e ->{
-            System.out.println(passwordTf.getText());
             String designation = authenticationSerivice.checkLogin(usernameTf.getText(),passwordTf.getText());
             if(designation!=null&&designation.equalsIgnoreCase("staff")){
                 JOptionPane.showMessageDialog(frame,"Staff Login successful");
