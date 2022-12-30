@@ -1,5 +1,6 @@
 package UI;
 
+import service.AuthenticationSerivice;
 import service.DailyReportServices;
 
 import javax.swing.*;
@@ -13,6 +14,7 @@ public class DailyReportUi {
     }
 
     DailyReportServices transactionServices = new DailyReportServices();
+    AuthenticationSerivice authenticationSerivice = new AuthenticationSerivice();
     public DailyReportUi() {
         JFrame frame = new JFrame("Daily Report");
 
@@ -31,7 +33,7 @@ public class DailyReportUi {
         dailyReportlogolbl.setBounds(150,30,400,50);
         dailyReportlogolbl.setForeground(Color.orange);
 
-        String usersList[]={"Murtaza","khalid","haris"};
+        String usersList[]= authenticationSerivice.getAllusers();
         JComboBox comboBox = new JComboBox(usersList);
         comboBox.setBounds(1100,100,110,30);
 
