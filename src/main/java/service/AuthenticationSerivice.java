@@ -1,12 +1,13 @@
 package service;
 
-import repository.AuthenticationData;
-
-import javax.swing.*;
+import repository.UserRepository;
 
 public class AuthenticationSerivice {
-    AuthenticationData authenticationData = new AuthenticationData();
+    UserRepository authenticationData = new UserRepository();
     public String checkLogin(String username, String password) {
         return authenticationData.getDesignation(username,password);
+    }
+    public boolean chechUserNameAvaialbllity(String userName){
+        return true;
     }
 }
