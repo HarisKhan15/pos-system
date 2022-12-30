@@ -13,6 +13,9 @@ public class AddCategoryUI {
     JLabel categoryLogoLabel=null;
     CategoryServices categoryServices = new CategoryServices();
 
+    public static void main(String[] args) {
+        new AddCategoryUI(null);
+    }
 
     public AddCategoryUI(Object object2) {
         JFrame frame = new JFrame("POS SYSTEM");
@@ -68,9 +71,7 @@ public class AddCategoryUI {
             categoryLogoLabel.setFont(new Font("Calibri", Font.PLAIN, 50));
             categoryLogoLabel.setBounds(150,30,400,50);
             categoryLogoLabel.setForeground(Color.orange);
-            categoryLogoLabel = new JLabel("Enter Name");
-            categoryLogoLabel.setBounds(100,100,170,40);
-            categoryLogoLabel.setFont(new Font("calibri",Font.BOLD,20));
+
             categorynamelabel = new JLabel("Enter Name");
             categorynamelabel.setBounds(100,100,170,40);
             categorynamelabel.setFont(new Font("calibri",Font.BOLD,20));

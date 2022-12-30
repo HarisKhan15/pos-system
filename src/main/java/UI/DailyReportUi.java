@@ -1,5 +1,7 @@
 package UI;
 
+import service.DailyReportServices;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -9,12 +11,12 @@ public class DailyReportUi {
     public static void main(String[] args) {
         new DailyReportUi();
     }
+
+    DailyReportServices transactionServices = new DailyReportServices();
     public DailyReportUi() {
-        JFrame frame = new JFrame("POS SYSTEM");
+        JFrame frame = new JFrame("Daily Report");
 
-
-
-        JPanel adminAreaPanel = new JPanel();
+        JPanel DailyReportPanel = new JPanel();
 
         JButton back = new JButton(new ImageIcon("/home/murtaza/Desktop/POS PROJ/pos-system/src/Assets/back_8.png"));
         back.setBackground(new Color(1, 176, 222));
@@ -24,34 +26,36 @@ public class DailyReportUi {
             frame.dispose();
         });
 
-        JLabel adminlogolbl= new JLabel("Daily Report");
-        adminlogolbl.setFont(new Font("Calibri", Font.PLAIN, 50));
-        adminlogolbl.setBounds(150,30,400,50);
-        adminlogolbl.setForeground(Color.orange);
+        JLabel dailyReportlogolbl= new JLabel("Daily Report");
+        dailyReportlogolbl.setFont(new Font("Calibri", Font.PLAIN, 50));
+        dailyReportlogolbl.setBounds(150,30,400,50);
+        dailyReportlogolbl.setForeground(Color.orange);
+
+        String usersList[]={"Murtaza","khalid","haris"};
+        JComboBox comboBox = new JComboBox(usersList);
+        comboBox.setBounds(1100,100,110,30);
+
+
+        String[] DailyReportColumns = {"Transaction ID","UserID","Transaction Date","Total Ammount"};
+
+        String[][] data = transactionServices.getDataForTable(DailyReportColumns.length);
+        DefaultTableModel dailyReportDtm = new DefaultTableModel(data, DailyReportColumns);
+        JTable dailyReportPanel = new JTable(dailyReportDtm);
+        JScrollPane dailyReportSp = new JScrollPane(dailyReportPanel);
+        dailyReportSp.setBounds(10, 90, 580, 500);
 
 
 
-        String[][] dataFromDatabase = {{"ABCDE","Pepsi","small","50"},
-                {"ABCDR","Pepsi","Medium","100"},
-                {"ABCDT","Pepsi","Large","150"},
-                {"ADDSA","Tuc biscuits","Medium","30"}};
-        String[] productColumn = {"Product ID","Product name","Product variant","Price"};
-        DefaultTableModel transactionsDtm = new DefaultTableModel(dataFromDatabase,productColumn);
-        JTable transactionsTable = new JTable(transactionsDtm);
-        JScrollPane transactionsSp = new JScrollPane(transactionsTable);
-        transactionsSp.setBounds(10,130,580,500);
+        DailyReportPanel.add(dailyReportSp);
+        DailyReportPanel.add(dailyReportlogolbl);
+        DailyReportPanel.setBounds(350,50,600,640);
+        DailyReportPanel.setBackground(Color.GRAY);
+        DailyReportPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
+        DailyReportPanel.setLayout(null);
 
-
-        adminAreaPanel.add(transactionsSp);
-        adminAreaPanel.add(adminlogolbl);
-        adminAreaPanel.setBounds(350,50,600,640);
-        adminAreaPanel.setBackground(Color.GRAY);
-        adminAreaPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
-        adminAreaPanel.setLayout(null);
-
-
+        frame.add(comboBox);
         frame.add(back);
-        frame.add(adminAreaPanel);
+        frame.add(DailyReportPanel);
         frame.setSize(1500,730);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
