@@ -22,7 +22,7 @@ public class AddUserUI {
         JLabel passwordLbl=new JLabel("Enter User Password : ");
         passwordLbl.setBounds(80,180,170,20);
 
-        JLabel usernameLbl=new JLabel("Enter UserName : ");
+        JLabel usernameLbl=new JLabel("Enter Name : ");
         usernameLbl.setBounds(113,230,150,20);
 
         JLabel userEmailLbl=new JLabel("Enter Email : ");
@@ -55,10 +55,9 @@ public class AddUserUI {
 
 
         AddUser.addActionListener(e ->{
-            if (authenticationSerivice.chechUserNameAvaialbllity(userNameTf.getText())) {
+            if (authenticationSerivice.chechUserNameAvaialbllity(userIdTF.getText())) {
                 JOptionPane.showMessageDialog(frame, "User Already Available");
-            }
-            else{
+            }else{
                 Users user =new Users(userIdTF.getText(),userpassWordTf.getText(),userNameTf.getText(),userDesignationTf.getText(),UseremailTf.getText());
                 if(authenticationSerivice.addUser(user)){
                     JOptionPane.showMessageDialog(frame, "User added Successfully");

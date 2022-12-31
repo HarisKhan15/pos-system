@@ -12,12 +12,7 @@ public class AuthenticationSerivice {
     }
     public boolean chechUserNameAvaialbllity(String userName){
 
-       if(userRepository.getUserName(userName)){
-           return true;
-       }
-       else {
-           return false;
-       }
+        return userRepository.getUserName(userName) == null;
     }
     public  boolean addUser(Users usr) {
 
