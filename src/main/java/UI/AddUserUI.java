@@ -22,14 +22,14 @@ public class AddUserUI {
         JLabel passwordLbl=new JLabel("Enter User Password : ");
         passwordLbl.setBounds(80,180,170,20);
 
-        JLabel usernameLbl=new JLabel("Enter UserName : ");
+        JLabel usernameLbl=new JLabel("Enter Name : ");
         usernameLbl.setBounds(113,230,150,20);
 
         JLabel userEmailLbl=new JLabel("Enter Email : ");
         userEmailLbl.setBounds(150,280,150,20);
 
         JLabel userDesignationLbl=new JLabel("Enter Designation : ");
-        userDesignationLbl.setBounds(100,330,150,20);
+        userDesignationLbl.setBounds(150,330,150,20);
 
 
 
@@ -45,10 +45,8 @@ public class AddUserUI {
         JTextField UseremailTf = new JTextField();
         UseremailTf.setBounds(250,282,150,20);
 
-        String []designationslist={"admin","staff"};
-
-        JComboBox selectDesignationCB = new JComboBox(designationslist);
-        selectDesignationCB.setBounds(250,332,150,20);
+        JTextField userDesignationTf = new JTextField();
+        userDesignationTf.setBounds(250,332,150,20);
 
 
         JButton AddUser = new JButton("Add User");
@@ -57,17 +55,14 @@ public class AddUserUI {
 
 
         AddUser.addActionListener(e ->{
-            if (authenticationSerivice.chechUserNameAvaialbllity(userNameTf.getText())) {
-                JOptionPane.showMessageDialog(frame, "User Already Available");
-            }
-            else{
-                Users user =new Users(userIdTF.getText(),userpassWordTf.getText(),userNameTf.getText(),selectDesignationCB.getSelectedItem().toString(),UseremailTf.getText());
-                if(authenticationSerivice.addUser(user)){
-                    JOptionPane.showMessageDialog(frame, "User added Successfully");
-                }
 
+            Users user =new Users(userIdTF.getText(),userpassWordTf.getText(),userNameTf.getText(),userDesignationTf.getText(),UseremailTf.getText());
+            if(authenticationSerivice.addUser(user)){
+                JOptionPane.showMessageDialog(frame, "User added Successfully");
             }
-                });
+
+            JOptionPane.showMessageDialog(frame, "User Already Available");
+        });
 
 
 
@@ -80,7 +75,7 @@ public class AddUserUI {
         frame.add(userNameTf);
         frame.add(UseremailTf);
         frame.add(userDesignationLbl);
-        frame.add(selectDesignationCB);
+        frame.add(userDesignationTf);
         frame.add(AddUser);
         frame.setSize(600,600);
         frame.setLocationRelativeTo(null);

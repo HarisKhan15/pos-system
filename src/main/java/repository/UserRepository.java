@@ -32,7 +32,7 @@ public class UserRepository extends BaseConnection{
     }
 
 
-    public void insertUser(String userId,String userPassword,String UserName,String UserDesignation,String userEmail){
+    public boolean insertUser(String userId,String userPassword,String UserName,String UserDesignation,String userEmail){
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO Users VALUES (?,?,?,?,?)");
@@ -42,9 +42,10 @@ public class UserRepository extends BaseConnection{
             stmt.setString(4,UserDesignation);
             stmt.setString(5,userEmail);
             stmt.executeUpdate();
+            return true;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return false;
         }
 
     }
