@@ -1,10 +1,15 @@
 package repository;
 
+import domain.Transactions;
 import domain.Varient;
 import domain.Users;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class UserRepository extends BaseConnection{
 
@@ -27,21 +32,21 @@ public class UserRepository extends BaseConnection{
     }
 
     public Boolean getUserName(String userName){
-        String username=null;
+        boolean flag=false;
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement("SELECT userName from Users where UserName=(?)");
             stmt.setString(1,userName);
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()){
-                username=rs.getString("UserName");
-            }
+          if(rs.next()){
+              flag=true;
+          }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        if(userName!=null){
+        if(flag!=false){
             return true;
         }
         else {
@@ -71,21 +76,51 @@ public class UserRepository extends BaseConnection{
         ArrayList<Users> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("Select * from Users");
+            PreparedStatement stmt = conn.prepareStatement("select userId from Users");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                list.add(new Users(rs.getString("userName")));
+                list.add(new Users(rs.getString("userId")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         String[] result = new String[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            result[i]=list.get(i).getUserName();
+            result[i]=list.get(i).getUserId();
         }
         return result;
     }
 
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    public String[][] getAllValueOfUserForJtabel(String userId) {
+        ArrayList<Transactions> transactionListOfUSer = new ArrayList<>();
+        try {
+            LocalDate localDate = LocalDate.now();//For reference
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String date = localDate.format(formatter);
 
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select * from Transactions where UserId=(?);");
+            stmt.setString(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                transactionListOfUSer.add(new Transactions(rs.getInt("transactionId"), rs.getString("userId"), rs.getDate("transactionDate"), rs.getDouble("totalAmount")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        String[][] result = new String[transactionListOfUSer.size()][4];
+        for (int i = 0; i < transactionListOfUSer.size(); i++) {
+            result[i][0] = transactionListOfUSer.get(i).getTransactionId().toString();
+            result[i][1] = transactionListOfUSer.get(i).getUserId();
+            result[i][2] = formatter.format(transactionListOfUSer.get(i).getTransactionDate());
+            result[i][3] = transactionListOfUSer.get(i).getAmount().toString();
+        }
+        return result;
+
+    }
 }

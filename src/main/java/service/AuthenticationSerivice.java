@@ -31,4 +31,8 @@ public class AuthenticationSerivice {
     public String[]getAllusers(){
         return userRepository.getAllUserForDropDown();
     }
+
+    public String[][] getreportofUser(String userId){
+        return userRepository.getAllValueOfUserForJtabel(userId);
+    }
 }

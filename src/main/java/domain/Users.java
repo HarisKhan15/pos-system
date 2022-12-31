@@ -15,8 +15,8 @@ public class Users {
         this.userEmail = userEmail;
     }
 
-    public Users(String userName) {
-        this.userName = userName;
+    public Users(String userId) {
+        this.userId = userId;
     }
 
     public String getUserId() {
