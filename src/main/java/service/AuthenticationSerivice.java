@@ -10,18 +10,8 @@ public class AuthenticationSerivice {
     public String checkLogin(String username, String password) {
         return userRepository.getDesignation(username,password);
     }
-    public boolean chechUserNameAvaialbllity(String userName){
-
-        return userRepository.getUserName(userName) == null;
-    }
     public  boolean addUser(Users usr) {
-
-        if(usr!=null){
-            userRepository.insertUser(usr.getUserId(),usr.getUserPass(), usr.getUserName(),usr.getUserDesignation(),usr.getUserEmail());
-            return true;
-        }
-        else {return false;}
-
+        return userRepository.insertUser(usr.getUserId(),usr.getUserPass(), usr.getUserName(),usr.getUserDesignation(),usr.getUserEmail());
     }
     public String[]getAllusers(){
         return userRepository.getAllUserForDropDown();

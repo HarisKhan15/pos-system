@@ -31,32 +31,8 @@ public class UserRepository extends BaseConnection{
         return "";
     }
 
-    public Boolean getUserName(String userName){
-        boolean flag=false;
-        try {
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("SELECT userName from Users where UserName=(?)");
-            stmt.setString(1,userName);
-            ResultSet rs = stmt.executeQuery();
 
-          if(rs.next()){
-              flag=true;
-          }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        if(flag!=false){
-            return true;
-        }
-        else {
-            return false;
-        }
-
-
-    }
-
-    public void insertUser(String userId,String userPassword,String UserName,String UserDesignation,String userEmail){
+    public boolean insertUser(String userId,String userPassword,String UserName,String UserDesignation,String userEmail){
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement("INSERT INTO Users VALUES (?,?,?,?,?)");
@@ -66,9 +42,10 @@ public class UserRepository extends BaseConnection{
             stmt.setString(4,UserDesignation);
             stmt.setString(5,userEmail);
             stmt.executeUpdate();
+            return true;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return false;
         }
 
     }

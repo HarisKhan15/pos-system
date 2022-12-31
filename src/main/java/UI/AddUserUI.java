@@ -55,16 +55,14 @@ public class AddUserUI {
 
 
         AddUser.addActionListener(e ->{
-            if (authenticationSerivice.chechUserNameAvaialbllity(userIdTF.getText())) {
-                JOptionPane.showMessageDialog(frame, "User Already Available");
-            }else{
-                Users user =new Users(userIdTF.getText(),userpassWordTf.getText(),userNameTf.getText(),userDesignationTf.getText(),UseremailTf.getText());
-                if(authenticationSerivice.addUser(user)){
-                    JOptionPane.showMessageDialog(frame, "User added Successfully");
-                }
 
+            Users user =new Users(userIdTF.getText(),userpassWordTf.getText(),userNameTf.getText(),userDesignationTf.getText(),UseremailTf.getText());
+            if(authenticationSerivice.addUser(user)){
+                JOptionPane.showMessageDialog(frame, "User added Successfully");
             }
-                });
+
+            JOptionPane.showMessageDialog(frame, "User Already Available");
+        });
 
 
 
