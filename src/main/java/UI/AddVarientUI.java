@@ -56,8 +56,9 @@ public class AddVarientUI {
                     JOptionPane.showMessageDialog(frame, "Varient Updated Successfully");
                 } else {
                     JOptionPane.showMessageDialog(frame, "Varient not updated Successfully");
-
                 }
+                frame.dispose();
+                new VariantsUI();
             });
         } else {
             VarientLogoLabel = new JLabel("add Varient ");
@@ -87,7 +88,10 @@ public class AddVarientUI {
                     }
 
                 }
+                frame.dispose();
+                new VariantsUI();
             });
+
         }
 
             addVarientPanel.add(donebtn);

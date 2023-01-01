@@ -9,7 +9,7 @@ public class BaseConnection {
 //        final String PASS = "password";
     final String DB_URL = "jdbc:mysql://localhost:3306/pos";
     final String USER = "root";
-    final String PASS = "password";
+    final String PASS = "42747414";
         Connection conn=null;
         public BaseConnection() {
             try {
