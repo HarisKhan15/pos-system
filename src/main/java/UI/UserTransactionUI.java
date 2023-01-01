@@ -1,5 +1,6 @@
 package UI;
 
+import domain.AllProducts;
 import domain.Cart;
 import repository.CartRepository;
 import service.AllProductService;
@@ -8,12 +9,19 @@ import service.CartService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 
 public class UserTransactionUI {
     CartService cartService = new CartService();
     AllProductService allProductService = new AllProductService();
 
+    Boolean barscan=false;
+    int barcount = 0;
+    public static void main(String[] args) {
+        new UserTransactionUI();
+    }
     public UserTransactionUI(){
         //Creating Frame
         JFrame frame = new JFrame("POS System");
@@ -34,6 +42,9 @@ public class UserTransactionUI {
         JTextField searchBarTf = new JTextField("Search Product");
         searchBarTf.setBounds(30,100,350,20);
 
+        JTextField searchByBarcode = new JTextField();
+        searchByBarcode.setBounds(30,125,350,20);
+
         JButton searchBtn = new JButton("Search");
         searchBtn.setBounds(390,98,75,25);
 
@@ -53,6 +64,7 @@ public class UserTransactionUI {
         searchAreaPnl.add(logoLbl);
         searchAreaPnl.add(searchBtn);
         searchAreaPnl.add(searchBarTf);
+        searchAreaPnl.add(searchByBarcode);
         searchAreaPnl.add(productSp);
 
         //Cart
@@ -133,7 +145,80 @@ public class UserTransactionUI {
             new LoginUI();
         });
 
+
+
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e) {
+
+
+                if(e.getKeyCode() == KeyEvent.VK_TAB) {
+                    barcount++;
+                    if (barcount == 1) {
+                        System.out.println(barcount);
+                        AllProducts allProducts = allProductService.getDataByBarcode(searchByBarcode.getText());
+
+                        String productId = allProducts.getProductId();
+                        String productName = allProducts.getProdctName();
+                        String variantId = allProducts.getVariantId();
+                        String variantName = allProducts.getVariantName();
+                        String productCategory = allProducts.getCategoryName();
+                        String unitPrice = allProducts.getPrice();
+                        String maxQuantity = allProducts.getQuantity();
+
+                        Cart cart = new Cart(productId, productName, variantId, variantName, productCategory, unitPrice, maxQuantity);
+                        int x = cartService.checkCart(cart, true);
+                        if (x == -1) {
+                            CartRepository.addProductIntoCart(cart);
+                            cartDtm.addRow(cartService.lastValue());
+                        } else if (x == -3) {
+                            JOptionPane.showMessageDialog(frame, "Max Quantity");
+                        } else {
+                            cartDtm.setValueAt(cartService.getUpdatedQuantity(x), x, 4);
+                            cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
+                        }
+                        amountLbl.setText(CartRepository.totalAmount().toString());
+                    }else{
+                        searchByBarcode.setText("");
+                        barcount = 0;
+                        searchByBarcode.requestFocus();
+
+                    }
+                }
+                return false;
+            }
+        });
+
+        searchByBarcode.addActionListener(e->{
+            AllProducts allProducts = allProductService.getDataByBarcode(searchByBarcode.getText());
+
+            String productId = allProducts.getProductId();
+            String productName = allProducts.getProdctName();
+            String variantId = allProducts.getVariantId();
+            String variantName = allProducts.getVariantName();
+            String productCategory = allProducts.getCategoryName();
+            String unitPrice = allProducts.getPrice();
+            String maxQuantity = allProducts.getQuantity();
+
+            Cart cart = new Cart(productId, productName, variantId, variantName, productCategory, unitPrice, maxQuantity);
+            int x = cartService.checkCart(cart,true);
+            if (x == -1) {
+                CartRepository.addProductIntoCart(cart);
+                cartDtm.addRow(cartService.lastValue());
+            } else if (x == -3) {
+                JOptionPane.showMessageDialog(frame, "Max Quantity");
+            } else {
+                cartDtm.setValueAt(cartService.getUpdatedQuantity(x), x, 4);
+                cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
+            }
+            amountLbl.setText(CartRepository.totalAmount().toString());
+        });
+
         addProductBtn.addActionListener(e-> {
+            if(productTable.getSelectedRow()<0){
+                JOptionPane.showMessageDialog(frame,"Please select any product!!");
+                return;
+            }
 
             String productId = null;
             String productName = null;

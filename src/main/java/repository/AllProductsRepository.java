@@ -62,4 +62,20 @@ public class AllProductsRepository extends BaseConnection{
         return result;
     }
 
+    public AllProducts getDataByBarcode(String barcode) {
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join Category as c on c.categoryId=p.categoryId inner join productVariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId where pv.barcode = ? ; ");
+            stmt.setString(1,barcode);
+            ResultSet rs = stmt.executeQuery();
+            AllProducts allProducts = null;
+            while (rs.next()) {
+                allProducts = new AllProducts(rs.getInt("productId"),rs.getString("productName"),rs.getInt("variantId"),rs.getString("variantName"),rs.getString("categoryName"),rs.getDouble("price"),rs.getInt("quantity"));
+            }
+            return allProducts;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
