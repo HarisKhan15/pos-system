@@ -6,9 +6,12 @@ import repository.VarientRepository;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLException;
 
 public class VariantsUI {
-
+    public static void main(String[] args) {
+        new VariantsUI();
+    }
     public VariantsUI() {
         VarientRepository varientRepository = new VarientRepository();
         JFrame frame = new JFrame("Products");
@@ -59,8 +62,9 @@ public class VariantsUI {
             return;
         }
         Object value = transactionsDtm.getValueAt(index, 1);
-        new AddVarientUI(value);
         frame.dispose();
+        new AddVarientUI(value);
+
 
     });
 
@@ -74,6 +78,8 @@ public class VariantsUI {
         Object toDeletValue = transactionsDtm.getValueAt(index, 1);
         if(!varientRepository.deleteVariantByName(toDeletValue)){
             JOptionPane.showMessageDialog(frame,"The selected item cannot be deleted because there are some products that are linked to it!!");
+            DefaultTableModel dtm2 = new DefaultTableModel(varientRepository.getAllValueForJtabel(column.length),column);
+            transactionsTable.setModel(dtm2);
             return;
         }
         transactionsDtm.removeRow(index);

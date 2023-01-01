@@ -13,7 +13,7 @@ public class VarientRepository extends BaseConnection{
         Varient varient =null;
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("Insert into Variant values (?,?)");
+            PreparedStatement stmt = conn.prepareStatement("Insert into variant values (?,?,'active')");
             stmt.setInt(1,0);
             stmt.setString(2,varientName);
             stmt.executeUpdate();
@@ -27,7 +27,7 @@ public class VarientRepository extends BaseConnection{
         ArrayList<Varient> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("Select * from variant");
+            PreparedStatement stmt = conn.prepareStatement("Select * from variant where availibilty = 'active' ");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -57,16 +57,63 @@ public class VarientRepository extends BaseConnection{
 
 
     }
-    public boolean deleteVariantByName(Object toDeleteName){
+    public boolean deleteVariantByName(Object toDeleteName) {
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Variant WHERE variantName=(?)");
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM variant WHERE variantName=(?)");
             stmt.setString(1,toDeleteName.toString());
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
+            updateAvailibility(toDeleteName.toString());
             return false;
         }
+
+    }
+    public void updateAvailibility(String name){
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("UPDATE variant SET availibilty = 'inactive' WHERE variantName=(?)");
+            stmt.setString(1,name);
+            stmt.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public Boolean getVarientName(String variantName){
+        boolean flag=false;
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("SELECT variantName from variant where variantName=(?)");
+            stmt.setString(1,variantName);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                flag=true;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        if(flag){
+            activeVariant(variantName);
+            return true;
+        }
+        else {
+            return false;
+        }
+
+
+    }
+    public void activeVariant(String name){
+            try{
+                Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+                PreparedStatement stmt = conn.prepareStatement("UPDATE variant SET availibilty = 'active' WHERE variantName=(?)");
+                stmt.setString(1,name);
+                stmt.executeUpdate();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
     }
 
