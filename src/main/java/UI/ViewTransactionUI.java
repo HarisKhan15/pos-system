@@ -22,7 +22,7 @@ public class ViewTransactionUI {
         transactionPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
         transactionPanel.setLayout(null);
 
-        JButton backBtn = new JButton("Back");
+        JButton backBtn = new JButton(AddCategoryUI.Imagepath);
         backBtn.setBounds(20,20,100,30);
 
         JLabel logoLbl = new JLabel("Transaction");

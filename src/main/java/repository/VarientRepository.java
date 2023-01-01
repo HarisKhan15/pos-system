@@ -27,7 +27,7 @@ public class VarientRepository extends BaseConnection{
         ArrayList<Varient> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("Select * from Variant");
+            PreparedStatement stmt = conn.prepareStatement("Select * from variant");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
