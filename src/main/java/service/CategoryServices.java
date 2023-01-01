@@ -26,4 +26,13 @@ public class CategoryServices {
             return true;}
 
     }
+    public  boolean checkCategoryAvailibility(String CategoryName){
+        if(categoryRepository.getCategoryname(CategoryName)){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
 }

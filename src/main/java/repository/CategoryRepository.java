@@ -57,17 +57,44 @@ public class CategoryRepository extends BaseConnection{
 
 
     }
-    public void deleteCategoryByName(Object toDeleteName){
-        Category category=null;
+    public boolean deleteCategoryByName(Object toDeleteName) {
+        Category category = null;
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM category WHERE categoryName=(?)");
-            stmt.setString(1,toDeleteName.toString());
+            stmt.setString(1, toDeleteName.toString());
             stmt.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            return false;
+        }
+
+
+    }
+    public Boolean getCategoryname(String CategoryName){
+        boolean flag=false;
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("SELECT categoryName from category where categoryName=(?)");
+            stmt.setString(1,CategoryName);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                flag=true;
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        if(flag!=false){
+            return true;
+        }
+        else {
+            return false;
+        }
+
 
     }
+
 }

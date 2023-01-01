@@ -57,8 +57,8 @@ public class DailyReportUi {
 
         userReportBtn.addActionListener(e->{
             if(comboBox.getSelectedIndex()==0){
-              new DailyReportUi();
-              frame.dispose();
+              dailyReportTable.setModel(dailyReportDtm);
+              return;
             }
             String[][] dataforUser = authenticationSerivice.getreportofUser(comboBox.getSelectedItem().toString());
             DefaultTableModel dtm2 = new DefaultTableModel(dataforUser, DailyReportColumns);

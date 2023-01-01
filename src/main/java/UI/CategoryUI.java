@@ -9,7 +9,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class CategoryUI {
-
+    public static void main(String[] args) {
+        new CategoryUI();
+    }
 
     public CategoryUI() {
         CategoryRepository categoryRepository = new CategoryRepository();
@@ -74,8 +76,13 @@ public class CategoryUI {
                 return;
             }
             Object toDeletValue = CategoryDtm.getValueAt(index, 1);
-            categoryRepository.deleteCategoryByName(toDeletValue);
+            if(!categoryRepository.deleteCategoryByName(toDeletValue)){
+                JOptionPane.showMessageDialog(frame,"The selected item cannot be deleted because there are some products that are linked to it!!");
+                return;
+            }
             CategoryDtm.removeRow(index);
+
+
         });
 
 

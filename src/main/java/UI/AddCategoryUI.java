@@ -84,13 +84,21 @@ public class AddCategoryUI {
 
             donebtn.addActionListener(e->{
                 Category cat =new Category(categorynameTf.getText());
-                if(categoryServices.addService(cat)){
-                    JOptionPane.showMessageDialog(frame, "Category saved Successfully");
+                if(categoryServices.checkCategoryAvailibility(categorynameTf.getText())){
+                    JOptionPane.showMessageDialog(frame, "Category already Available");
                 }
-                else {
-                    JOptionPane.showMessageDialog(frame,"Category not saved Successfully");
+                else{
+                    if(categoryServices.addService(cat)){
+                        JOptionPane.showMessageDialog(frame, "Category saved Successfully");
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(frame,"Category not saved Successfully");
+
+                    }
 
                 }
+
+
             });
             addCategoryPanel.add(donebtn);
             addCategoryPanel.add(categorynamelabel);

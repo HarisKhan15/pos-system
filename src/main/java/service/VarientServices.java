@@ -25,4 +25,14 @@ public class VarientServices {
             return true;}
 
     }
+
+    public  boolean checkVariantAvailibility(String variantName){
+        if(varientRepository.getVarientName(variantName)){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
 }
