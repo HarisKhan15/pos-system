@@ -11,9 +11,7 @@ import java.util.*;
 public class CompleteTransactionUI {
     TransactionService transactionService = new TransactionService();
     CartService cartService = new CartService();
-    public static void main(String[] args) {
 
-    }
 
     public CompleteTransactionUI(Double totalAmount){
         JFrame frame = new JFrame("POS System");

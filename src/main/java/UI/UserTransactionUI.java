@@ -13,9 +13,6 @@ import java.awt.*;
 public class UserTransactionUI {
     CartService cartService = new CartService();
     AllProductService allProductService = new AllProductService();
-    public static void main(String[] args) {
-        new UserTransactionUI();
-    }
 
     public UserTransactionUI(){
         //Creating Frame
@@ -40,13 +37,18 @@ public class UserTransactionUI {
         JButton searchBtn = new JButton("Search");
         searchBtn.setBounds(390,98,75,25);
 
+
         String[] productColumn = {"Product Id","Product Name","Variant Id","Variant","Category","Price","Stock"};
         String[][] dataFromDatabase = allProductService.getDataForTable(productColumn.length);
         DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         JTable productTable = new JTable(productDtm);
         JScrollPane productSp = new JScrollPane(productTable);
         productSp.setBounds(22,150,455,455);
-
+        searchBtn.addActionListener(e->{
+            String[][] searchRecords = allProductService.getBySearch(productColumn.length,searchBarTf.getText());
+            DefaultTableModel dtm2 = new DefaultTableModel(searchRecords,productColumn);
+            productTable.setModel(dtm2);
+        });
 
         searchAreaPnl.add(logoLbl);
         searchAreaPnl.add(searchBtn);

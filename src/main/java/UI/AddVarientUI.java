@@ -8,10 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AddVarientUI {
-    public static void main(String[] args) {
 
-        new AddVarientUI(null);
-    }
     JButton donebtn=null;
     JLabel varientnamelabel=null;
     JTextField VarientnameTf =null;

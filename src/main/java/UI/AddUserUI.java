@@ -9,9 +9,7 @@ import javax.swing.*;
 
 public class AddUserUI {
 
-    public static void main(String[] args) {
-        new AddUserUI();
-    }
+
     AuthenticationSerivice authenticationSerivice = new AuthenticationSerivice();
     UserRepository userRepository = new UserRepository();
     public AddUserUI() {

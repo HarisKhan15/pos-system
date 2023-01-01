@@ -12,9 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class DailyReportUi {
 
-    public static void main(String[] args) {
-        new DailyReportUi();
-    }
+
 
     DailyReportServices transactionServices = new DailyReportServices();
     AuthenticationSerivice authenticationSerivice = new AuthenticationSerivice();

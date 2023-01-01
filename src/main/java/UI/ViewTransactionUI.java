@@ -9,9 +9,7 @@ import java.awt.*;
 public class ViewTransactionUI {
     TransactionService transactionService = new TransactionService();
 
-    public static void main(String[] args) {
-        new ViewTransactionUI(1);
-    }
+
     public ViewTransactionUI(Integer transactionId){
         JFrame frame = new JFrame("POS SYSTEM");
 

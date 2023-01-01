@@ -9,9 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class CategoryUI {
-    public static void main(String[] args) {
-        new  CategoryUI();
-    }
+
 
     public CategoryUI() {
         CategoryRepository categoryRepository = new CategoryRepository();

@@ -5,9 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class ProductUI {
-    public static void main(String[] args) {
-        new ProductUI();
-    }
+
     public ProductUI() {
         JFrame frame = new JFrame("Products");
 

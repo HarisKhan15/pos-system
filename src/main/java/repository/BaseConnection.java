@@ -13,6 +13,7 @@ public class BaseConnection {
         Connection conn=null;
         public BaseConnection() {
             try {
+                Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             }catch (Exception e){
                 e.printStackTrace();

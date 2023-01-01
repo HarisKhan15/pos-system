@@ -13,9 +13,6 @@ public class AddCategoryUI {
     JLabel categoryLogoLabel=null;
     CategoryServices categoryServices = new CategoryServices();
 
-    public static void main(String[] args) {
-        new AddCategoryUI(null);
-    }
 
     public AddCategoryUI(Object object2) {
         JFrame frame = new JFrame("POS SYSTEM");

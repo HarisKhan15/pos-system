@@ -4,9 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class EditProductsUI {
-    public static void main(String[] args) {
-        new EditProductsUI();
-    }
+
     public EditProductsUI() {
         JFrame frame = new JFrame("POS SYSTEM");
 

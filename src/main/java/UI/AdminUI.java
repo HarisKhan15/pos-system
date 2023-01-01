@@ -4,9 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AdminUI {
-    public static void main(String[] args) {
-        new  AdminUI();
-    }
+
     public AdminUI() {
         JFrame frame = new JFrame("POS SYSTEM");
 

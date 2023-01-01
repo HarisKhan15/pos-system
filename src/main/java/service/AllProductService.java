@@ -8,4 +8,7 @@ public class AllProductService {
     public String[][] getDataForTable(int column){
         return allProductsRepository.getAllValueForJtabel(column);
     }
+    public String[][] getBySearch(int column,String searchData){
+        return allProductsRepository.getBySearch(column,searchData);
+    }
 }

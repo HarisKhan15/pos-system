@@ -8,10 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class VariantsUI {
-    public static void main(String[] args) {
-        new VariantsUI();
 
-    }
     public VariantsUI() {
         VarientRepository varientRepository = new VarientRepository();
         JFrame frame = new JFrame("Products");
