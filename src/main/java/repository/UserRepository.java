@@ -16,7 +16,7 @@ public class UserRepository extends BaseConnection{
     public String getDesignation(String username,String password){
         try{
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select userDesignation from Users where userId = '"+username+"' and userPass = '"+password+"'");
+            PreparedStatement stmt = conn.prepareStatement("select userDesignation from users where userId = '"+username+"' and userPass = '"+password+"'");
 //            stmt.setString(1,username);
 //            stmt.setString(2,password);h
             ResultSet rs = stmt.executeQuery();
@@ -35,7 +35,7 @@ public class UserRepository extends BaseConnection{
     public boolean insertUser(String userId,String userPassword,String UserName,String UserDesignation,String userEmail){
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO Users VALUES (?,?,?,?,?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO users VALUES (?,?,?,?,?)");
             stmt.setString(1,userId);
             stmt.setString(2,userPassword);
             stmt.setString(3,UserName);
@@ -53,8 +53,9 @@ public class UserRepository extends BaseConnection{
         ArrayList<Users> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select userId from Users");
+            PreparedStatement stmt = conn.prepareStatement("select userId from users");
             ResultSet rs = stmt.executeQuery();
+            list.add(new Users("All"));
 
             while (rs.next()) {
                 list.add(new Users(rs.getString("userId")));
@@ -78,8 +79,9 @@ public class UserRepository extends BaseConnection{
             String date = localDate.format(formatter);
 
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select * from Transactions where UserId=(?);");
+            PreparedStatement stmt = conn.prepareStatement("select * from transactions where UserId=(?) and transactionDate =(?);");
             stmt.setString(1, userId);
+            stmt.setString(2, date);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

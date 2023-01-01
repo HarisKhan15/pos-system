@@ -15,7 +15,7 @@ public class VariantsUI {
 
         JPanel variantAreaPanel = new JPanel();
 
-        JButton back = new JButton(new ImageIcon("back_8.png"));
+        JButton back = new JButton(new ImageIcon("src/Assets/back_8.png"));
         back.setBackground(new Color(1, 176, 222));
         back.setBounds(10, 2, 100, 50);
         back.addActionListener(e -> {

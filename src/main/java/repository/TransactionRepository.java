@@ -19,7 +19,7 @@ public class TransactionRepository extends BaseConnection{
             String date = localDate.format(formatter);
 
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select * from Transactions where transactionDate=(?);");
+            PreparedStatement stmt = conn.prepareStatement("select * from transactions where transactionDate=(?);");
             stmt.setString(1, date);
             ResultSet rs = stmt.executeQuery();
 
@@ -46,7 +46,7 @@ public class TransactionRepository extends BaseConnection{
         try {
 
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select * from Transactions;");
+            PreparedStatement stmt = conn.prepareStatement("select * from transactions;");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

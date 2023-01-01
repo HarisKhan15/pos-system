@@ -11,7 +11,7 @@ public class LoginUI {
 
     public LoginUI(){
         JFrame frame = new JFrame("POS System");
-        JLabel usernameLbl=new JLabel("Enter Username : ");
+        JLabel usernameLbl=new JLabel("Enter UserId : ");
         usernameLbl.setBounds(120,130,150,20);
 
         JLabel passwordLbl=new JLabel("Enter Password : ");

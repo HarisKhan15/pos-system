@@ -21,7 +21,7 @@ public class DailyReportUi {
 
         JPanel DailyReportPanel = new JPanel();
 
-        JButton back = new JButton(new ImageIcon("/home/murtaza/Desktop/POS PROJ/pos-system/src/Assets/back_8.png"));
+        JButton back = new JButton(new ImageIcon("src/Assets/back_8.png"));
         back.setBackground(new Color(1, 176, 222));
         back.setBounds(10,2,100,50);
         back.addActionListener(e->{
@@ -38,14 +38,6 @@ public class DailyReportUi {
         dropdownlbl.setFont(new Font("Calibri", Font.BOLD, 15));
         dropdownlbl.setBounds(1080,100,400,50);
 
-        JButton refresh = new JButton("Refresh");
-        refresh.setFont(new Font("Calibri", Font.BOLD, 15));
-        refresh.setBounds(1110,250,100,30);
-
-        refresh.addActionListener(e->{
-            new DailyReportUi();
-            frame.dispose();
-        });
         String usersList[]= authenticationSerivice.getAllusers();
         JComboBox comboBox = new JComboBox(usersList);
         comboBox.setBounds(1100,150,110,30);
@@ -53,27 +45,36 @@ public class DailyReportUi {
         JButton userReportBtn = new JButton("See Report");
         userReportBtn.setFont(new Font("Calibri", Font.BOLD, 15));
         userReportBtn.setBounds(1095,200,130,30);
-        String[] DailyReportColumns = {"Transaction ID","UserID","Transaction Date","Total Amount"};
 
+        String[] DailyReportColumns = {"Transaction ID","UserID","Transaction Date","Total Amount"};;
 
+        String[][] data = transactionServices.getDataForTable();
 
+        DefaultTableModel dailyReportDtm = new DefaultTableModel(data, DailyReportColumns);
+        JTable dailyReportTable = new JTable(dailyReportDtm);
+        JScrollPane dailyReportSp = new JScrollPane(dailyReportTable);
+        dailyReportSp.setBounds(10, 90, 580, 500);
 
         userReportBtn.addActionListener(e->{
-            JScrollPane dailyReportSp=maketable(authenticationSerivice.getreportofUser(comboBox.getSelectedItem().toString()), DailyReportColumns);
-            DailyReportPanel.add(dailyReportSp);
+            if(comboBox.getSelectedIndex()==0){
+              new DailyReportUi();
+              frame.dispose();
+            }
+            String[][] dataforUser = authenticationSerivice.getreportofUser(comboBox.getSelectedItem().toString());
+            DefaultTableModel dtm2 = new DefaultTableModel(dataforUser, DailyReportColumns);
+            dailyReportTable.setModel(dtm2);
         });
 
 
 
 
-        DailyReportPanel.add( maketable(transactionServices.getDataForTable(),DailyReportColumns));
+        DailyReportPanel.add(dailyReportSp);
         DailyReportPanel.add(dailyReportlogolbl);
         DailyReportPanel.setBounds(350,50,600,640);
         DailyReportPanel.setBackground(Color.GRAY);
         DailyReportPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
         DailyReportPanel.setLayout(null);
 
-        frame.add(refresh);
         frame.add(userReportBtn);
         frame.add(dropdownlbl);
         frame.add(comboBox);
@@ -85,13 +86,6 @@ public class DailyReportUi {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
-    String[][] data = transactionServices.getDataForTable();
-    public JScrollPane maketable(String datafortable[][],String columns[]) {
-        String[][] data = datafortable;
-        DefaultTableModel dailyReportDtm = new DefaultTableModel(data, columns);
-        JTable dailyReportPanel = new JTable(dailyReportDtm);
-        JScrollPane dailyReportSp = new JScrollPane(dailyReportPanel);
-        dailyReportSp.setBounds(10, 90, 580, 500);
-        return dailyReportSp;
-    }
+
+
 }

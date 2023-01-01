@@ -12,7 +12,7 @@ public class CategoryRepository extends BaseConnection{
         Category category=null;
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("Insert into Category values (?,?)");
+            PreparedStatement stmt = conn.prepareStatement("Insert into category values (?,?)");
             stmt.setInt(1,0);
             stmt.setString(2,CategoryName);
             stmt.executeUpdate();
@@ -25,7 +25,7 @@ public class CategoryRepository extends BaseConnection{
         ArrayList<Varient> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("Select * from Category");
+            PreparedStatement stmt = conn.prepareStatement("Select * from category");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -46,7 +46,7 @@ public class CategoryRepository extends BaseConnection{
         Category category=null;
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("UPDATE Category SET categoryName = (?) WHERE categoryName=(?)");
+            PreparedStatement stmt = conn.prepareStatement("UPDATE category SET categoryName = (?) WHERE categoryName=(?)");
             stmt.setString(1,updated);
             stmt.setString(2,previous.toString());
             stmt.executeUpdate();
@@ -61,7 +61,7 @@ public class CategoryRepository extends BaseConnection{
         Category category=null;
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Category WHERE categoryName=(?)");
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM category WHERE categoryName=(?)");
             stmt.setString(1,toDeleteName.toString());
             stmt.executeUpdate();
 

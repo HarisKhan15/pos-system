@@ -11,10 +11,19 @@ public class AdminUI {
 
 
         JPanel adminAreaPanel = new JPanel();
-        adminAreaPanel.setBounds(250,100,800,400);
+        adminAreaPanel.setBounds(200,100,850,400);
         adminAreaPanel.setBackground(Color.GRAY);
         adminAreaPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
         adminAreaPanel.setLayout(null);
+
+        JButton back = new JButton(new ImageIcon("src/Assets/back_8.png"));
+        back.setBackground(new Color(1, 176, 222));
+        back.setBounds(10, 2, 100, 50);
+        back.addActionListener(e -> {
+            new LoginUI();
+            frame.dispose();
+        });
+
 
         JLabel adminlogolbl= new JLabel("POS System");
         adminlogolbl.setFont(new Font("Calibri", Font.PLAIN, 50));
@@ -24,7 +33,7 @@ public class AdminUI {
 
 
         JButton transactionBtn = new JButton("Transaction");
-        transactionBtn.setBounds(100,100,180,100);
+        transactionBtn.setBounds(30,100,180,100);
         transactionBtn.addActionListener(e->{
             new TransactionUI();
             frame.dispose();
@@ -32,15 +41,19 @@ public class AdminUI {
 
 
         JButton dailyReportBtn = new JButton("Daily Report");
-        dailyReportBtn.setBounds(300,100,200,100);
+        dailyReportBtn.setBounds(235,100,200,100);
         dailyReportBtn.addActionListener(e->{
             new DailyReportUi();
             frame.dispose();
         });
 
         JButton categorybtn = new JButton("Add Category");
-        categorybtn.setBounds(520,100,180,100);
+        categorybtn.setBounds(450,100,180,100);
 
+        categorybtn.addActionListener(e->{
+            new CategoryUI();
+            frame.dispose();
+        });
 
 
 
@@ -51,6 +64,12 @@ public class AdminUI {
             frame.dispose();
         });
 
+        JButton AddUserBtn = new JButton("Add User");
+        AddUserBtn.setBounds(650,100,180,100);
+        AddUserBtn.addActionListener(e->{
+            new AddUserUI();
+            frame.dispose();
+        });
 
         JButton addinventoryBtn = new JButton("Add/Delete Inventory");
         addinventoryBtn.setBounds(300,250,200,100);
@@ -63,6 +82,7 @@ public class AdminUI {
 
 
 
+        adminAreaPanel.add(AddUserBtn);
         adminAreaPanel.add(adminlogolbl);
         adminAreaPanel.add(categorybtn);
         adminAreaPanel.add(transactionBtn);
@@ -72,6 +92,7 @@ public class AdminUI {
         adminAreaPanel.add(addinventoryBtn);
 
 
+        frame.add(back);
         frame.add(adminAreaPanel);
 
         frame.setSize(1500,730);
