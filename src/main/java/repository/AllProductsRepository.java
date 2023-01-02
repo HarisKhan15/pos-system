@@ -12,7 +12,7 @@ public class AllProductsRepository extends BaseConnection{
         ArrayList<AllProducts> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join category as c on c.categoryId=p.categoryId inner join productvariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId");
+            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join category as c on c.categoryId=p.categoryId inner join productvariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId where pv.quantity > 0 ;");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -39,7 +39,7 @@ public class AllProductsRepository extends BaseConnection{
         try {
 
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join Category as c on c.categoryId=p.categoryId inner join productVariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId where p.productName like ?");
+            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join Category as c on c.categoryId=p.categoryId inner join productVariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId where p.productName like ? having pv.quantity > 0");
             stmt.setString(1,"%"+searchedData+"%");
             ResultSet rs = stmt.executeQuery();
 

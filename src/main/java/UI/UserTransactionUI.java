@@ -9,6 +9,8 @@ import service.CartService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -39,7 +41,7 @@ public class UserTransactionUI {
         logoLbl.setBounds(130,20,300,50);
         logoLbl.setForeground(Color.orange);
 
-        JTextField searchBarTf = new JTextField("Search Product");
+        JTextField searchBarTf = new JTextField();
         searchBarTf.setBounds(30,100,350,20);
 
         JTextField searchByBarcode = new JTextField();
@@ -55,11 +57,7 @@ public class UserTransactionUI {
         JTable productTable = new JTable(productDtm);
         JScrollPane productSp = new JScrollPane(productTable);
         productSp.setBounds(22,150,455,455);
-        searchBtn.addActionListener(e->{
-            String[][] searchRecords = allProductService.getBySearch(productColumn.length,searchBarTf.getText());
-            DefaultTableModel dtm2 = new DefaultTableModel(searchRecords,productColumn);
-            productTable.setModel(dtm2);
-        });
+
 
         searchAreaPnl.add(logoLbl);
         searchAreaPnl.add(searchBtn);
@@ -109,6 +107,7 @@ public class UserTransactionUI {
         cartPnl.add(amountLbl);
         cartPnl.add(addProductBtn);
         cartPnl.add(deleteProductBtn);
+
         //Bill
         JPanel billPnl = new JPanel();
         billPnl.setBackground(Color.GRAY);
@@ -126,6 +125,12 @@ public class UserTransactionUI {
         billPnl.add(logOutBtn);
 
         //Button config
+        searchBtn.addActionListener(e->{
+            String[][] searchRecords = allProductService.getBySearch(productColumn.length,searchBarTf.getText());
+            DefaultTableModel dtm2 = new DefaultTableModel(searchRecords,productColumn);
+            productTable.setModel(dtm2);
+        });
+
         completeTransactionBtn.addActionListener(e->{
             if(CartRepository.getAll().isEmpty()){
                 JOptionPane.showMessageDialog(frame,"Cart is Empty !!");
@@ -146,7 +151,7 @@ public class UserTransactionUI {
         });
 
 
-
+        //BarCode Code
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             @Override
             public boolean dispatchKeyEvent(KeyEvent e) {
@@ -215,10 +220,6 @@ public class UserTransactionUI {
         });
 
         addProductBtn.addActionListener(e-> {
-            if(productTable.getSelectedRow()<0){
-                JOptionPane.showMessageDialog(frame,"Please select any product!!");
-                return;
-            }
 
             String productId = null;
             String productName = null;
@@ -245,6 +246,9 @@ public class UserTransactionUI {
                 unitPrice = cart.getUnitPrice().toString();
                 maxQuantity = cart.getMaxQuantity().toString();
 
+            }else{
+                JOptionPane.showMessageDialog(frame,"Please select any product!!");
+                return;
             }
             Cart cart = new Cart(productId, productName, variantId, variantName, productCategory, unitPrice, maxQuantity);
             int x = cartService.checkCart(cart,true);
