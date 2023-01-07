@@ -46,7 +46,7 @@ public class VarientRepository extends BaseConnection{
     public void updateVarient(Object previous,String updated){
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("UPDATE Variant SET variantName = (?) WHERE variantName=(?)");
+            PreparedStatement stmt = conn.prepareStatement("UPDATE variant SET variantName = (?) WHERE variantName=(?)");
             stmt.setString(1,updated);
             stmt.setString(2,previous.toString());
             stmt.executeUpdate();

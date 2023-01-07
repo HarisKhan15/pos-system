@@ -155,8 +155,6 @@ public class UserTransactionUI {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
             @Override
             public boolean dispatchKeyEvent(KeyEvent e) {
-
-
                 if(e.getKeyCode() == KeyEvent.VK_TAB) {
                     barcount++;
                     if (barcount == 1) {

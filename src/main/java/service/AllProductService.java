@@ -15,4 +15,14 @@ public class AllProductService {
     public String[][] getBySearch(int column,String searchData){
         return allProductsRepository.getBySearch(column,searchData);
     }
+    public boolean updateInventory(String price,String quantity,String productId){
+        if (allProductsRepository.updateproductInventory(price,quantity,productId)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 }
+
