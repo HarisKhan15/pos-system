@@ -75,14 +75,15 @@ public class CategoryUI {
                 JOptionPane.showMessageDialog(frame, "Please select Any category name to Delete");
                 return;
             }
+
             Object toDeletValue = CategoryDtm.getValueAt(index, 1);
             if(!categoryRepository.deleteCategoryByName(toDeletValue)){
-                JOptionPane.showMessageDialog(frame,"The selected item cannot be deleted because there are some products that are linked to it!!");
+                JOptionPane.showMessageDialog(frame,"Deletion of the item is not allowed because it is being used by other products so we are deactivating it!!");
+                DefaultTableModel dtm2 = new DefaultTableModel(categoryRepository.getAllValueForJtabel(column.length),column);
+                categoryTable.setModel(dtm2);
                 return;
             }
             CategoryDtm.removeRow(index);
-
-
         });
 
 

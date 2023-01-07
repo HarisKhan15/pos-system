@@ -12,11 +12,10 @@ public class CategoryRepository extends BaseConnection{
         Category category=null;
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("Insert into category values (?,?)");
+            PreparedStatement stmt = conn.prepareStatement("Insert into category values (?,?,'active')");
             stmt.setInt(1,0);
             stmt.setString(2,CategoryName);
             stmt.executeUpdate();
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -25,7 +24,7 @@ public class CategoryRepository extends BaseConnection{
         ArrayList<Varient> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("Select * from category");
+            PreparedStatement stmt = conn.prepareStatement("Select * from category where availabilty = 'active'");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -57,6 +56,18 @@ public class CategoryRepository extends BaseConnection{
 
 
     }
+    public void activeCategory(String name){
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("UPDATE category SET availabilty = 'active' WHERE categoryName=(?)");
+            stmt.setString(1,name);
+            stmt.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
     public boolean deleteCategoryByName(Object toDeleteName) {
         Category category = null;
         try {
@@ -65,12 +76,23 @@ public class CategoryRepository extends BaseConnection{
             stmt.setString(1, toDeleteName.toString());
             stmt.executeUpdate();
             return true;
-
         } catch (SQLException e) {
+            updateAvailibility(toDeleteName.toString());
             return false;
         }
 
 
+    }
+
+    public void updateAvailibility(String name){
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("UPDATE category SET availabilty = 'inactive' WHERE categoryName=(?)");
+            stmt.setString(1,name);
+            stmt.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     public Boolean getCategoryname(String CategoryName){
         boolean flag=false;
@@ -87,7 +109,8 @@ public class CategoryRepository extends BaseConnection{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        if(flag!=false){
+        if(flag){
+            activeCategory(CategoryName);
             return true;
         }
         else {

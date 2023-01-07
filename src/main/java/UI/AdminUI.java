@@ -71,6 +71,10 @@ public class AdminUI {
         JButton addinventoryBtn = new JButton("Add/Delete Inventory");
         addinventoryBtn.setBounds(335,250,180,100);
 
+        addinventoryBtn.addActionListener(e->{
+            new InventoryUI();
+            frame.dispose();
+        });
         JButton categorybtn = new JButton("Add Category");
         categorybtn.setBounds(535,250,180,100);
         categorybtn.addActionListener(e->{

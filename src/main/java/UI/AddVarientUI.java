@@ -47,18 +47,24 @@ public class AddVarientUI {
             VarientnameTf.setText(temp);
 
 
-            donebtn = new JButton(new ImageIcon("/home/murtaza/Desktop/POS PROJ/pos-system/src/Assets/done.png"));
+            donebtn = new JButton(new ImageIcon("src/Assets/done.png"));
             donebtn.setBounds(280, 190, 90, 40);
 
             donebtn.addActionListener(e -> {
-                String temp2 = VarientnameTf.getText();
-                if (varientServices.update(object.toString(), temp2)) {
-                    JOptionPane.showMessageDialog(frame, "Varient Updated Successfully");
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Varient not updated Successfully");
+                if (varientServices.checkVariantAvailibility(VarientnameTf.getText())) {
+                    JOptionPane.showMessageDialog(frame, "Variant is already available!!");
+                    return;
+                } else{
+                    String temp2 = VarientnameTf.getText();
+                    if (varientServices.update(object.toString(), temp2)) {
+                        JOptionPane.showMessageDialog(frame, "Varient Updated Successfully");
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Varient not updated Successfully");
+                    }
+                    frame.dispose();
+                    new VariantsUI();
                 }
-                frame.dispose();
-                new VariantsUI();
+
             });
         } else {
             VarientLogoLabel = new JLabel("add Varient ");
@@ -72,14 +78,13 @@ public class AddVarientUI {
             VarientnameTf = new JTextField();
             VarientnameTf.setBounds(250, 105, 170, 30);
 
-            donebtn = new JButton(new ImageIcon("/home/murtaza/Desktop/POS PROJ/pos-system/src/Assets/done.png"));
+            donebtn = new JButton(new ImageIcon("src/Assets/done.png"));
             donebtn.setBounds(280, 190, 90, 40);
 
             donebtn.addActionListener(e -> {
                 Varient vrt = new Varient(VarientnameTf.getText());
                 if (varientServices.checkVariantAvailibility(VarientnameTf.getText())) {
-                    JOptionPane.showMessageDialog(frame, "variant Available Already");
-                    return;
+                    JOptionPane.showMessageDialog(frame, "Variant is already available we have activated it!!");
                 } else {
                     if (varientServices.addVarient(vrt)) {
                         JOptionPane.showMessageDialog(frame, "Varient saved Successfully");

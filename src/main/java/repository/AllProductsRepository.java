@@ -12,7 +12,7 @@ public class AllProductsRepository extends BaseConnection{
         ArrayList<AllProducts> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join category as c on c.categoryId=p.categoryId inner join productvariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId where pv.quantity > 0 ;");
+            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join category as c on c.categoryId=p.categoryId inner join productvariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId ;");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -65,7 +65,7 @@ public class AllProductsRepository extends BaseConnection{
     public AllProducts getDataByBarcode(String barcode) {
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join Category as c on c.categoryId=p.categoryId inner join productVariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId where pv.barcode = ? ; ");
+            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join category as c on c.categoryId=p.categoryId inner join productVariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId where pv.barcode = ? ; ");
             stmt.setString(1,barcode);
             ResultSet rs = stmt.executeQuery();
             AllProducts allProducts = null;
@@ -77,5 +77,19 @@ public class AllProductsRepository extends BaseConnection{
             e.printStackTrace();
         }
         return null;
+    }
+    public boolean updateproductInventory(String price,String quantity,String productId){
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("update productvariant set price=(?),quantity=quantity+(?) where productId=(?)");
+            stmt.setString(1,price);
+            stmt.setString(2,quantity);
+            stmt.setString(3,productId);
+            stmt.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

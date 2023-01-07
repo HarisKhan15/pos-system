@@ -75,14 +75,20 @@ public class VariantsUI {
             JOptionPane.showMessageDialog(frame, "Please select Any item to Delete");
             return;
         }
-        Object toDeletValue = transactionsDtm.getValueAt(index, 1);
-        if(!varientRepository.deleteVariantByName(toDeletValue)){
-            JOptionPane.showMessageDialog(frame,"The selected item cannot be deleted because there are some products that are linked to it!!");
-            DefaultTableModel dtm2 = new DefaultTableModel(varientRepository.getAllValueForJtabel(column.length),column);
-            transactionsTable.setModel(dtm2);
-            return;
+        try{
+            Object toDeletValue = transactionsDtm.getValueAt(index, 1);
+
+            if(!varientRepository.deleteVariantByName(toDeletValue)){
+                JOptionPane.showMessageDialog(frame,"Deletion of the item is not allowed because it is being used by other products so we are deactivating it!!");
+                DefaultTableModel dtm2 = new DefaultTableModel(varientRepository.getAllValueForJtabel(column.length),column);
+                transactionsTable.setModel(dtm2);
+
+            }
+            transactionsDtm.removeRow(index);
+        } catch (ArrayIndexOutOfBoundsException exc){
+
         }
-        transactionsDtm.removeRow(index);
+;
     });
         optionPanel.add(addVarient);
         optionPanel.add(deleteVarient);
