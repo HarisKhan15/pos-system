@@ -13,7 +13,7 @@ public class Cart {
     private Double amount;
     private Integer maxQuantity;
 
-    public Cart(Integer productId, String productName, Integer variantId, String variantName, String productCategory, Double unitPrice, Integer quantity, Double amount) {
+    public Cart(Integer productId, String productName, Integer variantId, String variantName, String productCategory, Double unitPrice, Integer quantity, Double amount,Integer maxQuantity) {
         this.productId = productId;
         this.productName = productName;
         this.variantId = variantId;
@@ -22,6 +22,7 @@ public class Cart {
         this.unitPrice = unitPrice;
         this.quantity = quantity;
         this.amount = amount;
+        this.maxQuantity = maxQuantity;
     }
 
     public Integer getMaxQuantity() {

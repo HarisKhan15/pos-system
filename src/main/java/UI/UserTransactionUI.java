@@ -1,5 +1,6 @@
 package UI;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import domain.AllProducts;
 import domain.Cart;
 import repository.CartRepository;
@@ -18,6 +19,7 @@ import java.awt.event.KeyEvent;
 public class UserTransactionUI {
     CartService cartService = new CartService();
     AllProductService allProductService = new AllProductService();
+    Boolean refund=false;
 
     Boolean barscan=false;
     int barcount = 0;
@@ -50,17 +52,20 @@ public class UserTransactionUI {
         JButton searchBtn = new JButton("Search");
         searchBtn.setBounds(390,98,75,25);
 
+        JButton refundBtn = new JButton("Refund");
+        refundBtn.setBounds(390,125,75,25);
 
         String[] productColumn = {"Product Id","Product Name","Variant Id","Variant","Category","Price","Stock"};
         String[][] dataFromDatabase = allProductService.getDataForTable(productColumn.length);
         DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         JTable productTable = new JTable(productDtm);
         JScrollPane productSp = new JScrollPane(productTable);
-        productSp.setBounds(22,150,455,455);
+        productSp.setBounds(22,155,455,455);
 
 
         searchAreaPnl.add(logoLbl);
         searchAreaPnl.add(searchBtn);
+        searchAreaPnl.add(refundBtn);
         searchAreaPnl.add(searchBarTf);
         searchAreaPnl.add(searchByBarcode);
         searchAreaPnl.add(productSp);
@@ -126,6 +131,9 @@ public class UserTransactionUI {
 
         //Button config
         searchBtn.addActionListener(e->{
+            if(Integer.parseInt(searchBarTf.getText())<999999999){
+                return;
+            }
             String[][] searchRecords = allProductService.getBySearch(productColumn.length,searchBarTf.getText());
             DefaultTableModel dtm2 = new DefaultTableModel(searchRecords,productColumn);
             productTable.setModel(dtm2);
@@ -150,6 +158,18 @@ public class UserTransactionUI {
             new LoginUI();
         });
 
+        refundBtn.addActionListener(e->{
+            if(searchBarTf.getText().isEmpty()){
+                JOptionPane.showMessageDialog(frame,"Please Enter Transaction Id !!");
+                return;
+            }
+
+            CartRepository.clearList();
+            String[][] refundedData = cartService.getDataForRefund(Integer.parseInt(searchBarTf.getText()), cartColumn.length);
+            DefaultTableModel dtm2 = new DefaultTableModel(refundedData,cartColumn);
+            cartTable.setModel(dtm2);
+            this.refund = true;
+        });
 
         //BarCode Code
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
@@ -157,41 +177,45 @@ public class UserTransactionUI {
             public boolean dispatchKeyEvent(KeyEvent e) {
 
 
-                if(e.getKeyCode() == KeyEvent.VK_TAB) {
+                if (e.getKeyCode() == KeyEvent.VK_TAB) {
                     barcount++;
                     if (barcount == 1) {
                         System.out.println(barcount);
                         AllProducts allProducts = allProductService.getDataByBarcode(searchByBarcode.getText());
+                        if (allProducts != null) {
 
-                        String productId = allProducts.getProductId();
-                        String productName = allProducts.getProdctName();
-                        String variantId = allProducts.getVariantId();
-                        String variantName = allProducts.getVariantName();
-                        String productCategory = allProducts.getCategoryName();
-                        String unitPrice = allProducts.getPrice();
-                        String maxQuantity = allProducts.getQuantity();
 
-                        Cart cart = new Cart(productId, productName, variantId, variantName, productCategory, unitPrice, maxQuantity);
-                        int x = cartService.checkCart(cart, true);
-                        if (x == -1) {
-                            CartRepository.addProductIntoCart(cart);
-                            cartDtm.addRow(cartService.lastValue());
-                        } else if (x == -3) {
-                            JOptionPane.showMessageDialog(frame, "Max Quantity");
+                            String productId = allProducts.getProductId();
+                            String productName = allProducts.getProdctName();
+                            String variantId = allProducts.getVariantId();
+                            String variantName = allProducts.getVariantName();
+                            String productCategory = allProducts.getCategoryName();
+                            String unitPrice = allProducts.getPrice();
+                            String maxQuantity = allProducts.getQuantity();
+
+                            Cart cart = new Cart(productId, productName, variantId, variantName, productCategory, unitPrice, maxQuantity);
+                            int x = cartService.checkCart(cart, true);
+                            if (x == -1) {
+                                CartRepository.addProductIntoCart(cart);
+                                cartDtm.addRow(cartService.lastValue());
+                            } else if (x == -3) {
+                                JOptionPane.showMessageDialog(frame, "Max Quantity");
+                            } else {
+                                cartDtm.setValueAt(cartService.getUpdatedQuantity(x), x, 4);
+                                cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
+                            }
+                            amountLbl.setText(CartRepository.totalAmount().toString());
                         } else {
-                            cartDtm.setValueAt(cartService.getUpdatedQuantity(x), x, 4);
-                            cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
-                        }
-                        amountLbl.setText(CartRepository.totalAmount().toString());
-                    }else{
-                        searchByBarcode.setText("");
-                        barcount = 0;
-                        searchByBarcode.requestFocus();
+                            searchByBarcode.setText("");
+                            barcount = 0;
+                            searchByBarcode.requestFocus();
 
+                        }
                     }
                 }
+
                 return false;
-            }
+        }
         });
 
         searchByBarcode.addActionListener(e->{
@@ -262,7 +286,9 @@ public class UserTransactionUI {
                 cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
             }
             amountLbl.setText(CartRepository.totalAmount().toString());
-
+            String[][] searchRecords = allProductService.getBySearch(productColumn.length,searchBarTf.getText());
+            DefaultTableModel dtm2 = new DefaultTableModel(searchRecords,productColumn);
+            productTable.setModel(dtm2);
 
         });
         deleteProductBtn.addActionListener(e->{
@@ -271,6 +297,10 @@ public class UserTransactionUI {
             }
             Cart cart = CartRepository.getByIndex(cartTable.getSelectedRow());
 
+            if(refund){
+
+                return;
+            }
             int x = cartService.checkCart(cart,false);
             if (x == -2) {
                 CartRepository.removeData(cartTable.getSelectedRow());

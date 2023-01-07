@@ -101,5 +101,20 @@ public class CartRepository extends BaseConnection{
             e.printStackTrace();
         }
     }
+    public String[][] getCartForRefund(int transactionId,int column){
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,tp.productQuantity,tp.amount,pv.quantity from productvariant as pv inner join transactionproduct as tp on tp.prodVariantId = pv.prodVariantId inner join products as p on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId inner join category as c on c.categoryId = p.categoryId where tp.transactionId = ?;");
+            stmt.setInt(1,transactionId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                cartArrayList.add(new Cart(rs.getInt("productId"),rs.getString("productName"),rs.getInt("variantId"),rs.getString("variantName"),rs.getString("categoryName"),rs.getDouble("price"),rs.getInt("productQuantity"),rs.getDouble("amount"),rs.getInt("quantity")));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return CartRepository.getAllCartDataForJTable(column);
+    }
 
 }
