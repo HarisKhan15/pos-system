@@ -31,7 +31,7 @@ public class CategoryRepository extends BaseConnection{
                 list.add(new Varient(rs.getInt("categoryId"),rs.getString("categoryName")));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         String[][] result = new String[list.size()][2];
         for (int i = 0; i < list.size(); i++) {
@@ -69,7 +69,6 @@ public class CategoryRepository extends BaseConnection{
     }
 
     public boolean deleteCategoryByName(Object toDeleteName) {
-        Category category = null;
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement("DELETE FROM category WHERE categoryName=(?)");

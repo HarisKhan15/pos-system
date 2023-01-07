@@ -76,7 +76,7 @@ public class VariantsUI {
             return;
         }
         try{
-            Object toDeletValue = transactionsDtm.getValueAt(index, 1);
+            Object toDeletValue = transactionsTable.getValueAt(index, 1);
 
             if(!varientRepository.deleteVariantByName(toDeletValue)){
                 JOptionPane.showMessageDialog(frame,"Deletion of the item is not allowed because it is being used by other products so we are deactivating it!!");
