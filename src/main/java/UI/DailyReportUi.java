@@ -1,21 +1,18 @@
 package UI;
 
-import service.AuthenticationSerivice;
+import service.UserService;
 import service.DailyReportServices;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class DailyReportUi {
 
 
 
     DailyReportServices transactionServices = new DailyReportServices();
-    AuthenticationSerivice authenticationSerivice = new AuthenticationSerivice();
+    UserService userService = new UserService();
     public DailyReportUi() {
         JFrame frame = new JFrame("Daily Report");
 
@@ -38,7 +35,7 @@ public class DailyReportUi {
         dropdownlbl.setFont(new Font("Calibri", Font.BOLD, 15));
         dropdownlbl.setBounds(1080,100,400,50);
 
-        String usersList[]= authenticationSerivice.getAllusers();
+        String usersList[]= userService.getAllusers();
         JComboBox comboBox = new JComboBox(usersList);
         comboBox.setBounds(1100,150,110,30);
 
@@ -60,7 +57,7 @@ public class DailyReportUi {
               dailyReportTable.setModel(dailyReportDtm);
               return;
             }
-            String[][] dataforUser = authenticationSerivice.getreportofUser(comboBox.getSelectedItem().toString());
+            String[][] dataforUser = userService.getreportofUser(comboBox.getSelectedItem().toString());
             DefaultTableModel dtm2 = new DefaultTableModel(dataforUser, DailyReportColumns);
             dailyReportTable.setModel(dtm2);
         });

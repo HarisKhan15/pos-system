@@ -16,7 +16,7 @@ public class AdminUI {
         adminAreaPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
         adminAreaPanel.setLayout(null);
 
-        JButton back = new JButton(new ImageIcon("src/Assets/back_8.png"));
+        JButton back = new JButton("Logout");
         back.setBackground(new Color(1, 176, 222));
         back.setBounds(10, 2, 100, 50);
         back.addActionListener(e -> {
@@ -50,11 +50,11 @@ public class AdminUI {
         JButton addproductBtn = new JButton("Add/Delete Product");
         addproductBtn.setBounds(430,100,180,100);
         addproductBtn.addActionListener(e->{
-            new ProductUI();
+            new AddProductUI();
             frame.dispose();
         });
 
-        JButton AddUserBtn = new JButton("Add User");
+        JButton AddUserBtn = new JButton("Add/Delete User");
         AddUserBtn.setBounds(630,100,180,100);
         AddUserBtn.addActionListener(e->{
             new AddUserUI();

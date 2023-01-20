@@ -35,4 +35,7 @@ public class CategoryServices {
         }
 
     }
+    public  String[] getAllCategoryforDropDown(){
+        return   categoryRepository.getAllValueforDropdown();
+    }
 }

@@ -1,12 +1,12 @@
 package UI;
 
-import service.AuthenticationSerivice;
+import service.UserService;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class LoginUI {
-    AuthenticationSerivice authenticationSerivice = new AuthenticationSerivice();
+    UserService userService = new UserService();
 
 
 
@@ -36,7 +36,7 @@ public class LoginUI {
         loginBtn.setBounds(200,240,100,20);
 
         loginBtn.addActionListener(e ->{
-            String designation = authenticationSerivice.checkLogin(usernameTf.getText(),passwordTf.getText());
+            String designation = userService.checkLogin(usernameTf.getText(),passwordTf.getText());
             if(designation!=null&&designation.equalsIgnoreCase("staff")){
                 JOptionPane.showMessageDialog(frame,"Staff Login successful");
                 frame.dispose();

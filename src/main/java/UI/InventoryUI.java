@@ -15,7 +15,7 @@ public class InventoryUI {
     }
     AllProductService allProductService = new AllProductService();
     JTable productTable;
-    String[] productColumn = {"Product Id","Product Name","Variant Id","Variant","Category","Price","Stock"};
+    String[] productColumn = {"Product Id","Product Name","Variant Id","Variant","Category","Price","Stock","avalaiblity"};
 
     String[][] dataFromDatabase;
     public InventoryUI() {
@@ -40,7 +40,7 @@ public class InventoryUI {
 
 
 
-        dataFromDatabase = allProductService.getDataForTable(productColumn.length);
+        dataFromDatabase = allProductService.InventoryJtabel(productColumn.length);
 
         DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         productTable = new JTable(productDtm);

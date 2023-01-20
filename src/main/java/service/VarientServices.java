@@ -33,6 +33,8 @@ public class VarientServices {
         else{
             return false;
         }
-
+    }
+    public  String[] getAllVarientforDropDown(){
+      return   varientRepository.getAllValueforDropdown();
     }
 }
