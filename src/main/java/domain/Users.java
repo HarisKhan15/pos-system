@@ -6,6 +6,7 @@ public class Users {
     private String userName;
     private String userDesignation;
     private String userEmail;
+    private String availabilty;
 
     public Users(String userId, String userPass, String userName, String userDesignation, String userEmail) {
         this.userId = userId;
@@ -13,6 +14,22 @@ public class Users {
         this.userName = userName;
         this.userDesignation = userDesignation;
         this.userEmail = userEmail;
+    }
+    public Users(String userId, String userPass, String userName, String userDesignation, String userEmail,String availabilty) {
+        this.userId = userId;
+        this.userPass = userPass;
+        this.userName = userName;
+        this.userDesignation = userDesignation;
+        this.userEmail = userEmail;
+        this.availabilty = availabilty;
+    }
+
+    public String getAvailabilty() {
+        return availabilty;
+    }
+
+    public void setAvailabilty(String availabilty) {
+        this.availabilty = availabilty;
     }
 
     public Users(String userId) {

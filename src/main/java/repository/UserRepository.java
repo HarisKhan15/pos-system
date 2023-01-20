@@ -35,7 +35,7 @@ public class UserRepository extends BaseConnection{
     public boolean insertUser(String userId,String userPassword,String UserName,String UserDesignation,String userEmail){
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO users VALUES (?,?,?,?,?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO users VALUES (?,?,?,?,?,'active')");
             stmt.setString(1,userId);
             stmt.setString(2,userPassword);
             stmt.setString(3,UserName);
@@ -45,6 +45,7 @@ public class UserRepository extends BaseConnection{
             return true;
 
         } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
 
@@ -101,5 +102,52 @@ public class UserRepository extends BaseConnection{
         }
         return result;
 
+    }
+    public String[][] getAllUsersToDelete(int columnSize) {
+        ArrayList<Users> list = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("Select * from users where avalaibilty='active'");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(new Users(rs.getString("UserId"),rs.getString("UserPass"), rs.getString("userName"),rs.getString("userDesignation"),rs.getString("userEmail"),rs.getString("avalaibilty")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String[][] result = new String[list.size()][6];
+        for (int i = 0; i < list.size(); i++) {
+            result[i][0]=list.get(i).getUserId();
+            result[i][1]=list.get(i).getUserPass();
+            result[i][2]=list.get(i).getUserName();
+            result[i][3]=list.get(i).getUserDesignation();
+            result[i][4]=list.get(i).getUserEmail();
+            result[i][5]=list.get(i).getAvailabilty();
+        }
+        return result;
+
+    }
+    public boolean deleteUserByName(String UserName) {
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM users WHERE UserName=(?)");
+            stmt.setString(1,UserName.toString());
+            stmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            updateUserAvailibility(UserName);
+            return false;
+        }
+
+    }
+    public void updateUserAvailibility(String UserName){
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("UPDATE users SET avalaibilty='inactive' WHERE UserName=(?)");
+            stmt.setString(1,UserName);
+            stmt.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

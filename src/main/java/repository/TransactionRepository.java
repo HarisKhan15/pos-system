@@ -70,7 +70,7 @@ public class TransactionRepository extends BaseConnection{
         ArrayList<ViewTransaction> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select p.productName,v.variantName,c.categoryName,tp.productQuantity,tp.amount from transactionProduct as tp inner Join transactions as t on t.transactionId =tp.transactionId inner join productvariant as pv on pv.prodVariantId=tp.prodVariantId inner join products as p on p.productId=pv.productId inner join variant as v on v.variantId = pv.variantId inner join category as c on c.categoryId = p.categoryId where t.transactionId = ?;");
+            PreparedStatement stmt = conn.prepareStatement("select p.productName,v.variantName,c.categoryName,tp.productQuantity,tp.amount from transactionproduct as tp  inner Join transactions as t on t.transactionId =tp.transactionId inner join productvariant as pv  on pv.prodvariantId=tp.prodvariantId inner join products as p on p.productId=pv.productId  inner join variant as v on v.variantId = pv.variantId inner join category as c  on c.categoryId = p.categoryId where t.transactionId = (?)");
             stmt.setInt(1,transactionId);
             ResultSet rs = stmt.executeQuery();
 
