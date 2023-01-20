@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
 
@@ -24,13 +25,6 @@ public class CartRepository extends BaseConnection{
     }
     public static Cart getLastValue(){
         return cartArrayList.get(cartArrayList.size()-1);
-    }
-    public static Double totalAmount(){
-        Double sum=0.0;
-        for (Cart c:cartArrayList) {
-            sum+=c.getAmount();
-        }
-        return sum;
     }
     public static void clearList(){
         cartArrayList.removeAll(cartArrayList);
@@ -52,9 +46,15 @@ public class CartRepository extends BaseConnection{
     public static void removeData(int index) {
         cartArrayList.remove(index);
     }
+    public static void removeByObject(Cart cart){
+        cartArrayList.remove(cart);
+    }
 
     public static Cart getByIndex(int index) {
         return cartArrayList.get(index);
+    }
+    public static boolean isEmpty(){
+        return cartArrayList.isEmpty();
     }
 
     public int getProductVariantId(int productId,int variantId){
@@ -104,17 +104,53 @@ public class CartRepository extends BaseConnection{
     public String[][] getCartForRefund(int transactionId,int column){
         try{
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,tp.productQuantity,tp.amount,pv.quantity from productvariant as pv inner join transactionproduct as tp on tp.prodVariantId = pv.prodVariantId inner join products as p on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId inner join category as c on c.categoryId = p.categoryId where tp.transactionId = ?;");
+            PreparedStatement stmt = conn.prepareStatement("select pv.prodVariantId,p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,tp.productQuantity,tp.amount,pv.quantity from productvariant as pv inner join transactionproduct as tp on tp.prodVariantId = pv.prodVariantId inner join products as p on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId inner join category as c on c.categoryId = p.categoryId where tp.transactionId = ?;");
             stmt.setInt(1,transactionId);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()){
-                cartArrayList.add(new Cart(rs.getInt("productId"),rs.getString("productName"),rs.getInt("variantId"),rs.getString("variantName"),rs.getString("categoryName"),rs.getDouble("price"),rs.getInt("productQuantity"),rs.getDouble("amount"),rs.getInt("quantity")));
+                cartArrayList.add(new Cart(rs.getInt("prodVariantId"),rs.getInt("productId"),rs.getString("productName"),rs.getInt("variantId"),rs.getString("variantName"),rs.getString("categoryName"),rs.getDouble("price"),rs.getInt("productQuantity"),rs.getDouble("amount"),rs.getInt("quantity")));
             }
         }catch (Exception e){
             e.printStackTrace();
         }
         return CartRepository.getAllCartDataForJTable(column);
     }
-
+    public void updateTransaction(String userId,int transactionId,Double amount){
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("update transactions set userId = ? ,transactionDate = ?,totalAmount = ? where transactionId = ?;");
+            stmt.setString(1,userId);
+            stmt.setDate(2,Date.valueOf(LocalDate.now()));
+            stmt.setDouble(3,amount);
+            stmt.setInt(4, transactionId);
+            stmt.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void updateByHashMap(int quantity,double amount,int prodVariantId,int transactionId){
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("update transactionproduct set productQuantity = ?,amount = ? where prodVariantId = ? and transactionID = ?;");
+            stmt.setInt(1, quantity);
+            stmt.setDouble(2,amount);
+            stmt.setInt(3, prodVariantId);
+            stmt.setInt(4, transactionId);
+            stmt.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void deleteItemFromTransactionProductTable(int transactionId,int prodVariantId){
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("delete from transactionproduct where transactionId = ? and prodVariantId = ?;");
+            stmt.setInt(1, transactionId);
+            stmt.setInt(2, prodVariantId);
+            stmt.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

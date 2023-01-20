@@ -40,7 +40,7 @@ public class LoginUI {
             if(designation!=null&&designation.equalsIgnoreCase("staff")){
                 JOptionPane.showMessageDialog(frame,"Staff Login successful");
                 frame.dispose();
-                new UserTransactionUI();
+                new UserTransactionUI(usernameTf.getText());
                 return;
             }else if(designation!=null&&designation.equalsIgnoreCase("admin")){
                 JOptionPane.showMessageDialog(frame,"Admin Login successful");

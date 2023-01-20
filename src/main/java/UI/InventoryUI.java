@@ -40,7 +40,7 @@ public class InventoryUI {
 
 
 
-        dataFromDatabase = allProductService.getDataForTable(productColumn.length);
+        dataFromDatabase = allProductService.getInventoryForTable(productColumn.length);
 
         DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         productTable = new JTable(productDtm);
@@ -117,7 +117,7 @@ public class InventoryUI {
 
                 JOptionPane.showMessageDialog(updateFrame, "Inventory updated succesfully");
 
-                dataFromDatabase = allProductService.getDataForTable(productColumn.length);
+                dataFromDatabase = allProductService.getInventoryForTable(productColumn.length);
                 DefaultTableModel updateddtm = new DefaultTableModel(dataFromDatabase,productColumn);
                 productTable.setModel(updateddtm);
                 updateFrame.dispose();

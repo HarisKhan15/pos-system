@@ -122,5 +122,72 @@ public class TransactionRepository extends BaseConnection{
         }
         return i;
     }
+    public Double totalTransactionProfit(){
+        Double profit=0.0;
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select sum(totalAmount) as Profit from transactions;");
+            ResultSet rs = stmt.executeQuery();
 
+            while (rs.next()){
+                 profit= rs.getDouble("Profit");
+            }
+            return profit;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return profit;
+    }
+    public Double totalDailyProfit(){
+        Double profit=0.0;
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select sum(totalAmount) as Profit from transactions where transactionDate = ?;");
+            stmt.setDate(1, Date.valueOf(LocalDate.now()));
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                profit= rs.getDouble("Profit");
+            }
+            return profit;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return profit;
+    }
+    public Double totalDailyProfitByUser(String user){
+        Double profit=0.0;
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select sum(totalAmount) as Profit from transactions where transactionDate = ? and userId = ?;");
+            stmt.setDate(1, Date.valueOf(LocalDate.now()));
+            stmt.setString(2,user);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                profit= rs.getDouble("Profit");
+            }
+            return profit;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return profit;
+    }
+    public Double getProfitPerTransaction(int transactionId){
+        Double profit=0.0;
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select sum(amount) as Profit from transactionproduct where transactionId = ?;");
+            stmt.setInt(1,transactionId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()){
+                profit= rs.getDouble("Profit");
+            }
+            return profit;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return profit;
+    }
 }

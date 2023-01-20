@@ -1,7 +1,11 @@
 package domain;
 
 public class AllProducts {
+    private Integer prodVariantId;
     private Integer productId;
+
+
+
     private String prodctName;
     private Integer variantId;
     private String variantName;
@@ -19,7 +23,18 @@ public class AllProducts {
         this.quantity = Integer.parseInt(quantity);
     }
 
+
     public AllProducts(Integer productId, String prodctName, Integer variantId, String variantName, String categoryName, Double price, Integer quantity) {
+        this.productId = productId;
+        this.prodctName = prodctName;
+        this.variantId = variantId;
+        this.variantName = variantName;
+        this.categoryName = categoryName;
+        this.price = price;
+        this.quantity = quantity;
+    }
+    public AllProducts(Integer prodVariantId,Integer productId, String prodctName, Integer variantId, String variantName, String categoryName, Double price, Integer quantity) {
+        this.prodVariantId = prodVariantId;
         this.productId = productId;
         this.prodctName = prodctName;
         this.variantId = variantId;
@@ -32,7 +47,9 @@ public class AllProducts {
     public String getProductId() {
         return String.valueOf(productId);
     }
-
+    public String getProdVariantId() {
+        return String.valueOf(prodVariantId);
+    }
     public void setProductId(Integer productId) {
         this.productId = productId;
     }

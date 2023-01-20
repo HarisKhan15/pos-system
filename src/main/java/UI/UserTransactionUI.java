@@ -1,6 +1,5 @@
 package UI;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import domain.AllProducts;
 import domain.Cart;
 import repository.CartRepository;
@@ -10,23 +9,18 @@ import service.CartService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 
 public class UserTransactionUI {
     CartService cartService = new CartService();
     AllProductService allProductService = new AllProductService();
-    Boolean refund=false;
 
-    Boolean barscan=false;
     int barcount = 0;
     public static void main(String[] args) {
-        new UserTransactionUI();
+        new UserTransactionUI("hasd");
     }
-    public UserTransactionUI(){
+    public UserTransactionUI( String userId){
         //Creating Frame
         JFrame frame = new JFrame("POS System");
         frame.getContentPane().setBackground(Color.LIGHT_GRAY);
@@ -52,20 +46,20 @@ public class UserTransactionUI {
         JButton searchBtn = new JButton("Search");
         searchBtn.setBounds(390,98,75,25);
 
-        JButton refundBtn = new JButton("Refund");
-        refundBtn.setBounds(390,125,75,25);
 
-        String[] productColumn = {"Product Id","Product Name","Variant Id","Variant","Category","Price","Stock"};
-        String[][] dataFromDatabase = allProductService.getDataForTable(productColumn.length);
+        String[] productColumn = {"*","PId","Product Name","VId","Variant","Category","Price","Stock"};
+        String[][] dataFromDatabase = allProductService.getAllValuesForJTable(productColumn.length);
         DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         JTable productTable = new JTable(productDtm);
         JScrollPane productSp = new JScrollPane(productTable);
         productSp.setBounds(22,155,455,455);
+        productTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+        productTable.getColumnModel().getColumn(1).setPreferredWidth(25);
+        productTable.getColumnModel().getColumn(3).setPreferredWidth(25);
 
 
         searchAreaPnl.add(logoLbl);
         searchAreaPnl.add(searchBtn);
-        searchAreaPnl.add(refundBtn);
         searchAreaPnl.add(searchBarTf);
         searchAreaPnl.add(searchByBarcode);
         searchAreaPnl.add(productSp);
@@ -92,7 +86,7 @@ public class UserTransactionUI {
         totalBillLbl.setBounds(30,473,150,20);
         totalBillLbl.setFont(new Font("Serif", Font.PLAIN, 20));
 
-        JLabel amountLbl = new JLabel(CartRepository.totalAmount().toString());
+        JLabel amountLbl = new JLabel(cartService.getTotalBill().toString());
         amountLbl.setBounds(130,470,100,30);
         amountLbl.setFont(new Font("Serif", Font.PLAIN, 20));
         amountLbl.setBorder(BorderFactory.createLineBorder(Color.black,2));
@@ -123,20 +117,27 @@ public class UserTransactionUI {
         JButton completeTransactionBtn = new JButton("Complete Transaction");
         JButton cancelTransactionBtn = new JButton("Cancel Transaction");
         JButton logOutBtn = new JButton("LogOut");
+        JButton refundBtn = new JButton("Refund");
 
 
         billPnl.add(completeTransactionBtn);
         billPnl.add(cancelTransactionBtn);
         billPnl.add(logOutBtn);
+        billPnl.add(refundBtn);
 
         //Button config
+        refundBtn.addActionListener(e->{
+            CartRepository.clearList();
+            frame.dispose();
+            new RefundUI(userId);
+        });
         searchBtn.addActionListener(e->{
-            if(Integer.parseInt(searchBarTf.getText())<999999999){
-                return;
-            }
             String[][] searchRecords = allProductService.getBySearch(productColumn.length,searchBarTf.getText());
             DefaultTableModel dtm2 = new DefaultTableModel(searchRecords,productColumn);
             productTable.setModel(dtm2);
+            productTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+            productTable.getColumnModel().getColumn(1).setPreferredWidth(25);
+            productTable.getColumnModel().getColumn(3).setPreferredWidth(25);
         });
 
         completeTransactionBtn.addActionListener(e->{
@@ -145,12 +146,12 @@ public class UserTransactionUI {
                 return;
             }
             frame.dispose();
-            new CompleteTransactionUI(Double.parseDouble(amountLbl.getText()));
+            new CompleteTransactionUI(Double.parseDouble(amountLbl.getText()),userId);
         });
         cancelTransactionBtn.addActionListener(e->{
             CartRepository.removeAllData();
             frame.dispose();
-            new UserTransactionUI();
+            new UserTransactionUI(userId);
         });
         logOutBtn.addActionListener(e->{
             CartRepository.removeAllData();
@@ -158,18 +159,6 @@ public class UserTransactionUI {
             new LoginUI();
         });
 
-        refundBtn.addActionListener(e->{
-            if(searchBarTf.getText().isEmpty()){
-                JOptionPane.showMessageDialog(frame,"Please Enter Transaction Id !!");
-                return;
-            }
-
-            CartRepository.clearList();
-            String[][] refundedData = cartService.getDataForRefund(Integer.parseInt(searchBarTf.getText()), cartColumn.length);
-            DefaultTableModel dtm2 = new DefaultTableModel(refundedData,cartColumn);
-            cartTable.setModel(dtm2);
-            this.refund = true;
-        });
 
         //BarCode Code
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
@@ -204,7 +193,7 @@ public class UserTransactionUI {
                                 cartDtm.setValueAt(cartService.getUpdatedQuantity(x), x, 4);
                                 cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
                             }
-                            amountLbl.setText(CartRepository.totalAmount().toString());
+                            amountLbl.setText(cartService.getTotalBill().toString());
                         } else {
                             searchByBarcode.setText("");
                             barcount = 0;
@@ -240,7 +229,7 @@ public class UserTransactionUI {
                 cartDtm.setValueAt(cartService.getUpdatedQuantity(x), x, 4);
                 cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
             }
-            amountLbl.setText(CartRepository.totalAmount().toString());
+            amountLbl.setText(cartService.getTotalBill().toString());
         });
 
         addProductBtn.addActionListener(e-> {
@@ -253,13 +242,13 @@ public class UserTransactionUI {
             String unitPrice = null;
             String maxQuantity = null;
             if (productTable.getSelectedRow() > -1) {
-                productId = productTable.getValueAt(productTable.getSelectedRow(), 0).toString();
-                productName = productTable.getValueAt(productTable.getSelectedRow(), 1).toString();
-                variantId = productTable.getValueAt(productTable.getSelectedRow(), 2).toString();
-                variantName = productTable.getValueAt(productTable.getSelectedRow(), 3).toString();
-                productCategory = productTable.getValueAt(productTable.getSelectedRow(), 4).toString();
-                unitPrice = productTable.getValueAt(productTable.getSelectedRow(), 5).toString();
-                maxQuantity = productTable.getValueAt(productTable.getSelectedRow(), 6).toString();
+                productId = productTable.getValueAt(productTable.getSelectedRow(), 1).toString();
+                productName = productTable.getValueAt(productTable.getSelectedRow(), 2).toString();
+                variantId = productTable.getValueAt(productTable.getSelectedRow(), 3).toString();
+                variantName = productTable.getValueAt(productTable.getSelectedRow(), 4).toString();
+                productCategory = productTable.getValueAt(productTable.getSelectedRow(), 5).toString();
+                unitPrice = productTable.getValueAt(productTable.getSelectedRow(), 6).toString();
+                maxQuantity = productTable.getValueAt(productTable.getSelectedRow(), 7).toString();
             } else if (cartTable.getSelectedRow() > -1) {
                 Cart cart = CartRepository.getAll().get(cartTable.getSelectedRow());
                 productId = cart.getProductId().toString();
@@ -285,10 +274,13 @@ public class UserTransactionUI {
                 cartDtm.setValueAt(cartService.getUpdatedQuantity(x), x, 4);
                 cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
             }
-            amountLbl.setText(CartRepository.totalAmount().toString());
+            amountLbl.setText(cartService.getTotalBill().toString());
             String[][] searchRecords = allProductService.getBySearch(productColumn.length,searchBarTf.getText());
             DefaultTableModel dtm2 = new DefaultTableModel(searchRecords,productColumn);
             productTable.setModel(dtm2);
+            productTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+            productTable.getColumnModel().getColumn(1).setPreferredWidth(25);
+            productTable.getColumnModel().getColumn(3).setPreferredWidth(25);
 
         });
         deleteProductBtn.addActionListener(e->{
@@ -297,10 +289,6 @@ public class UserTransactionUI {
             }
             Cart cart = CartRepository.getByIndex(cartTable.getSelectedRow());
 
-            if(refund){
-
-                return;
-            }
             int x = cartService.checkCart(cart,false);
             if (x == -2) {
                 CartRepository.removeData(cartTable.getSelectedRow());
@@ -309,7 +297,7 @@ public class UserTransactionUI {
                 cartDtm.setValueAt(cartService.getUpdatedQuantity(cartTable.getSelectedRow()), cartTable.getSelectedRow(), 4);
                 cartDtm.setValueAt(cartService.getUpdatedAmount(cartTable.getSelectedRow()), cartTable.getSelectedRow(), 5);
             }
-            amountLbl.setText(CartRepository.totalAmount().toString());
+            amountLbl.setText(cartService.getTotalBill().toString());
         });
         frame.add(cartPnl);
         frame.add(searchAreaPnl);

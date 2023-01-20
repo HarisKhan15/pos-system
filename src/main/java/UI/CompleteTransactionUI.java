@@ -6,14 +6,13 @@ import service.TransactionService;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 
 public class CompleteTransactionUI {
     TransactionService transactionService = new TransactionService();
     CartService cartService = new CartService();
 
 
-    public CompleteTransactionUI(Double totalAmount){
+    public CompleteTransactionUI(Double totalAmount,String userId){
         JFrame frame = new JFrame("POS System");
         frame.getContentPane().setBackground(Color.LIGHT_GRAY);
 
@@ -41,15 +40,15 @@ public class CompleteTransactionUI {
             }
             JOptionPane.showMessageDialog(frame,"Transaction Completed \n Returned Amount : "+(Double.parseDouble(receivedAmountTf.getText())-totalAmount)+" Rs");
 
-            //Entering Transaction Data into Transaction Table and getting It's Id
-            int transactionId = transactionService.transactionEnterIntoDatabaseAndGetId("haris",totalAmount);
+            //Entering Transaction Data into Transaction Table and getting Its id
+            int transactionId = transactionService.transactionEnterIntoDatabaseAndGetId(userId,totalAmount);
 
             //Entering Items into Database
             cartService.addItemsToDatabase(transactionId);
 
             CartRepository.clearList();
             frame.dispose();
-            new UserTransactionUI();
+            new UserTransactionUI(userId);
 
         });
 

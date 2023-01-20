@@ -3,6 +3,7 @@ package domain;
 import java.util.Objects;
 
 public class Cart {
+    private Integer prodVariantId;
     private Integer productId;
     private String productName;
     private Integer variantId;
@@ -13,7 +14,12 @@ public class Cart {
     private Double amount;
     private Integer maxQuantity;
 
-    public Cart(Integer productId, String productName, Integer variantId, String variantName, String productCategory, Double unitPrice, Integer quantity, Double amount,Integer maxQuantity) {
+    public Integer getProdVariantId() {
+        return prodVariantId;
+    }
+
+    public Cart(Integer prodVariantId, Integer productId, String productName, Integer variantId, String variantName, String productCategory, Double unitPrice, Integer quantity, Double amount, Integer maxQuantity) {
+        this.prodVariantId = prodVariantId;
         this.productId = productId;
         this.productName = productName;
         this.variantId = variantId;
@@ -34,6 +40,18 @@ public class Cart {
     }
 
     public Cart(String productId, String productName, String variantId, String variantName, String productCategory, String unitPrice, String maxQuantity) {
+        this.productId = Integer.parseInt(productId);
+        this.productName = productName;
+        this.variantId = Integer.parseInt(variantId);
+        this.variantName = variantName;
+        this.productCategory = productCategory;
+        this.unitPrice = Double.parseDouble(unitPrice);
+        this.quantity = 1;
+        this.amount = this.unitPrice;
+        this.maxQuantity = Integer.parseInt(maxQuantity);
+    }
+    public Cart(String prodVariantId,String productId, String productName, String variantId, String variantName, String productCategory, String unitPrice, String maxQuantity) {
+        this.prodVariantId= Integer.valueOf(prodVariantId);
         this.productId = Integer.parseInt(productId);
         this.productName = productName;
         this.variantId = Integer.parseInt(variantId);
