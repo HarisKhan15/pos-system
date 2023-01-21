@@ -80,11 +80,10 @@ public class VariantsUI {
 
             if(!varientRepository.deleteVariantByName(toDeletValue)){
                 JOptionPane.showMessageDialog(frame,"Deletion of the item is not allowed because it is being used by other products so we are deactivating it!!");
-                DefaultTableModel dtm2 = new DefaultTableModel(varientRepository.getAllValueForJtabel(column.length),column);
-                transactionsTable.setModel(dtm2);
-
             }
-            transactionsDtm.removeRow(index);
+            DefaultTableModel dtm2 = new DefaultTableModel(varientRepository.getAllValueForJtabel(column.length),column);
+            transactionsTable.setModel(dtm2);
+
         } catch (ArrayIndexOutOfBoundsException exc){
 
         }

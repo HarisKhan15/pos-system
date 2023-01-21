@@ -13,6 +13,8 @@ public class AllProducts {
     private Double price;
     private Integer quantity;
 
+    private String availabilty;
+
     public AllProducts(String productId, String prodctName, String variantId, String variantName, String categoryName, String price, String quantity) {
         this.productId = Integer.parseInt(productId);
         this.prodctName = prodctName;
@@ -21,6 +23,14 @@ public class AllProducts {
         this.categoryName = categoryName;
         this.price = Double.parseDouble(price);
         this.quantity = Integer.parseInt(quantity);
+    }
+
+    public AllProducts( String prodctName,String variantName, String categoryName, Double price, Integer quantity) {
+        this.prodctName = prodctName;
+        this.variantName = variantName;
+        this.categoryName = categoryName;
+        this.price = price;
+        this.quantity = quantity;
     }
 
 
@@ -42,6 +52,17 @@ public class AllProducts {
         this.categoryName = categoryName;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public AllProducts(int productId, String productName, int variantId, String variantName, String categoryName, double price, int quantity, String avalaibilty) {
+        this.productId = productId;
+        this.prodctName = productName;
+        this.variantId = variantId;
+        this.variantName = variantName;
+        this.categoryName = categoryName;
+        this.price = price;
+        this.quantity = quantity;
+        this.availabilty=avalaibilty;
     }
 
     public String getProductId() {
@@ -100,5 +121,17 @@ public class AllProducts {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public void setProdVariantId(Integer prodVariantId) {
+        this.prodVariantId = prodVariantId;
+    }
+
+    public String getAvailabilty() {
+        return availabilty;
+    }
+
+    public void setAvailabilty(String availabilty) {
+        this.availabilty = availabilty;
     }
 }

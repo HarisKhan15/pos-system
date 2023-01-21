@@ -119,4 +119,24 @@ public class CategoryRepository extends BaseConnection{
 
     }
 
+    public String[] getAllValueforDropdown(){
+        ArrayList<Varient> list = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select categoryName from category where availabilty='active'");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Varient(rs.getString("categoryName")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        String[] result = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i]=list.get(i).getVarientName();
+        }
+        return result;
+
+    }
 }

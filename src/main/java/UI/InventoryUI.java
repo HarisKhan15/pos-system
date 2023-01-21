@@ -116,15 +116,14 @@ public class InventoryUI {
             if (allProductService.updateInventory(priceUpdated,quantityUpdates,productId)){
 
                 JOptionPane.showMessageDialog(updateFrame, "Inventory updated succesfully");
-
-                dataFromDatabase = allProductService.getInventoryForTable(productColumn.length);
-                DefaultTableModel updateddtm = new DefaultTableModel(dataFromDatabase,productColumn);
-                productTable.setModel(updateddtm);
                 updateFrame.dispose();
 
             } else {
                 JOptionPane.showMessageDialog(updateFrame, "Inventory not updated succesfully");
             }
+            dataFromDatabase = allProductService.getInventoryForTable(productColumn.length);
+            DefaultTableModel updateddtm = new DefaultTableModel(dataFromDatabase,productColumn);
+            productTable.setModel(updateddtm);
         });
 
 

@@ -1,7 +1,7 @@
 package UI;
 
-import service.AuthenticationSerivice;
 import service.DailyReportServices;
+import service.UserService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,7 +15,7 @@ public class DailyReportUi {
 
 
     DailyReportServices transactionServices = new DailyReportServices();
-    AuthenticationSerivice authenticationSerivice = new AuthenticationSerivice();
+    UserService authenticationSerivice = new UserService();
     public DailyReportUi() {
         JFrame frame = new JFrame("Daily Report");
 

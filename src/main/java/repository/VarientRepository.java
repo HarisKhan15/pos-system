@@ -1,5 +1,6 @@
 package repository;
 
+import domain.Users;
 import domain.Varient;
 
 import java.sql.*;
@@ -114,6 +115,26 @@ public class VarientRepository extends BaseConnection{
             }catch (Exception e){
                 e.printStackTrace();
             }
+
+    }
+    public String[] getAllValueforDropdown(){
+        ArrayList<Varient> list = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select variantName from variant where availibilty='active'");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Varient(rs.getString("variantName")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        String[] result = new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i]=list.get(i).getVarientName();
+        }
+        return result;
 
     }
 
