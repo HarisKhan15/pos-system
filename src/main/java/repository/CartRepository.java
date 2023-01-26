@@ -91,7 +91,7 @@ public class CartRepository extends BaseConnection{
     public void itemIntoDatabase(int transactionId,int prodVariantId,int quantity,double amount){
         try{
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("insert into transactionProduct values(?,?,?,?);");
+            PreparedStatement stmt = conn.prepareStatement("insert into transactionproduct values(?,?,?,?);");
             stmt.setInt(1,transactionId);
             stmt.setInt(2,prodVariantId);
             stmt.setInt(3, quantity);

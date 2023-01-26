@@ -1,6 +1,7 @@
 package repository;
 
 import domain.AllProducts;
+import domain.Category;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class AllProductsRepository extends BaseConnection{
         ArrayList<AllProducts> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select pv.prodVariantId,p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join Category as c on c.categoryId=p.categoryId inner join productVariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId ; ");
+            PreparedStatement stmt = conn.prepareStatement("select pv.prodVariantId,p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join category as c on c.categoryId=p.categoryId inner join productvariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId ; ");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -103,11 +104,11 @@ public class AllProductsRepository extends BaseConnection{
         }
         return result;
     }
-    public String[][] getAllValueForJtabel(int columnSize) {
+    public String[][] getAllValueForProductJtabel(int columnSize) {
         ArrayList<AllProducts> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join category as c on c.categoryId=p.categoryId inner join productvariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId ORDER BY productId ASC ");
+            PreparedStatement stmt = conn.prepareStatement("select p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join category as c on c.categoryId=p.categoryId inner join productvariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId  where avalaibilty ='active' ORDER BY productId ASC ");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -133,7 +134,7 @@ public class AllProductsRepository extends BaseConnection{
         try {
 
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("select pv.prodVariantId,p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join Category as c on c.categoryId=p.categoryId inner join productVariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId where p.productName like ? having pv.quantity > 0");
+            PreparedStatement stmt = conn.prepareStatement("select pv.prodVariantId,p.productId,p.productName,v.variantId,v.variantName,c.categoryName,pv.price,pv.quantity from products as p inner join category as c on c.categoryId=p.categoryId inner join productvariant as pv on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId where p.productName like ? having pv.quantity > 0");
             stmt.setString(1,"%"+searchedData+"%");
             ResultSet rs = stmt.executeQuery();
 
@@ -308,16 +309,20 @@ public class AllProductsRepository extends BaseConnection{
 
 
     }
-
-    public Boolean getProductsname(String ProductsName){
+    public Boolean getProductsAvailability(String productName,String categoryName,String varientName){
         boolean flag=false;
+        Integer categoryId;
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("SELECT productName from products where productName=(?)");
-            stmt.setString(1,ProductsName);
-            ResultSet rs = stmt.executeQuery();
+            PreparedStatement stmt1 = conn.prepareStatement("select p.productName,v.variantName,c.categoryName from products as p inner join category \n" +
+                    "as c on c.categoryId=p.categoryId inner join productvariant as pv\n" +
+                    " on p.productId = pv.productId inner join variant as v on v.variantId = pv.variantId where p.productName=(?) and v.variantName=(?)and c.categoryName=(?);");
+            stmt1.setString(1,productName);
+            stmt1.setString(2,varientName);
+            stmt1.setString(3,categoryName);
+            ResultSet rs1 = stmt1.executeQuery();
 
-            if(rs.next()){
+            if(rs1.next()){
                 flag=true;
             }
 
@@ -325,7 +330,7 @@ public class AllProductsRepository extends BaseConnection{
             throw new RuntimeException(e);
         }
         if(flag){
-            activeProduct(ProductsName);
+            activeProduct(productName,categoryName);
             return true;
         }
         else {
@@ -334,11 +339,13 @@ public class AllProductsRepository extends BaseConnection{
 
 
     }
-    public void activeProduct(String name){
+    public void activeProduct(String name,String categoryName){
         try{
+            Integer categoryId=getCategoryIdbyCatName(categoryName);
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("UPDATE products SET avalaibilty = 'active' WHERE productName=(?)");
+            PreparedStatement stmt = conn.prepareStatement("UPDATE products SET avalaibilty = 'active' WHERE productName=(?) and categoryId=(?)");
             stmt.setString(1,name);
+            stmt.setInt(2,categoryId);
             stmt.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();
@@ -369,24 +376,27 @@ public class AllProductsRepository extends BaseConnection{
             return false;
         }
     }
-    public boolean deleteProdcutByName(Object toDeleteName) {
+    public boolean deleteProdcutByName(String prodcutName,String varientName,String categoryName) {
+       Integer categoryId =getCategoryIdbyCatName(categoryName);
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM products WHERE productName=(?)");
-            stmt.setString(1,toDeleteName.toString());
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM products WHERE productName=(?) and categoryId=(?)");
+            stmt.setString(1,prodcutName);
+            stmt.setString(2,categoryName);
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            updateProductAvailibility(toDeleteName.toString());
+            updateProductAvailibility(prodcutName,categoryId);
             return false;
         }
 
     }
-    public void updateProductAvailibility(String name){
+    public void updateProductAvailibility(String productName,Integer categoryId){
         try{
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("UPDATE products SET avalaibilty = 'inactive' WHERE productName=(?)");
-            stmt.setString(1,name);
+            PreparedStatement stmt = conn.prepareStatement("UPDATE products SET avalaibilty = 'inactive' WHERE productName=(?) and categoryId=(?)");
+            stmt.setString(1,productName);
+            stmt.setInt(2,categoryId);
             stmt.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();

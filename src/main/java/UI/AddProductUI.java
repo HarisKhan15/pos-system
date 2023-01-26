@@ -10,6 +10,7 @@ import service.VarientServices;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class AddProductUI {
     public static void main(String[] args) {
@@ -20,27 +21,49 @@ public class AddProductUI {
     VarientServices varientServices= new VarientServices();
     CategoryServices categoryServices = new CategoryServices();
     private int flag =0;
+    String[] productColumn = {"Product Id","Product Name","VarientId","Variant","Category","Price","Stock"};
+  private   String[][] dataFromDatabase;
+  private   DefaultTableModel productDtm;
+  private   JTable productTable;
+   private JScrollPane productSp;
     public AddProductUI() {
         JFrame frame = new JFrame("POS System");
         frame.getContentPane().setBackground(Color.LIGHT_GRAY);
 
 
-        JLabel logoLbl = new JLabel("Add Products");
+        JLabel logoLbl = new JLabel("All Products");
         logoLbl.setFont(new Font("Calibri", Font.PLAIN, 50));
-        logoLbl.setBounds(80,20,400,50);
-        logoLbl.setForeground(Color.BLACK);
+        logoLbl.setBounds(120,20,300,50);
+        logoLbl.setForeground(Color.ORANGE);
+
+        JLabel logoLbl2 = new JLabel("Add Products");
+        logoLbl2.setFont(new Font("Calibri", Font.PLAIN, 50));
+        logoLbl2.setBounds(60,20,350,50);
+        logoLbl2.setForeground(Color.ORANGE);
 
 
+        JTextField searchBarTf = new JTextField();
+        searchBarTf.setText("Search By name");
+        searchBarTf.setBounds(30,100,350,20);
 
-        JPanel productAddPanel = new JPanel();
-        productAddPanel.setBounds(10,20,500,640);
-        productAddPanel.setBackground(Color.lightGray);
-        productAddPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
-        productAddPanel.setLayout(null);
-        productAddPanel.add(logoLbl);
+        JTextField searchByBarcode = new JTextField();
+        searchByBarcode.setText("Search BY Barcode");
+
+        searchByBarcode.setBounds(30,125,350,20);
+
+        JButton searchBtn = new JButton("Search");
+        searchBtn.setBounds(390,98,95,25);
+
+
+        JPanel ProductAddPanel = new JPanel();
+        ProductAddPanel.setBackground(Color.gray);
+        ProductAddPanel.setBounds(550,20,430,530);
+        ProductAddPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
+        ProductAddPanel.setLayout(null);
+
 
         JPanel productAddPanel2 = new JPanel();
-        productAddPanel2.setBounds(100,100,300,350);
+        productAddPanel2.setBounds(60,100,300,350);
         productAddPanel2.setBackground(Color.lightGray);
         productAddPanel2.setBorder(BorderFactory.createLineBorder(Color.black,10));
         productAddPanel2.setLayout(null);
@@ -59,7 +82,7 @@ public class AddProductUI {
         String varientList[]= varientServices.getAllVarientforDropDown();
         JComboBox varientCb = new JComboBox(varientList);
         varientCb.setBounds(130,90,100,25);
-        varientCb.setFont(new Font("Calibri", Font.PLAIN, 20));
+        varientCb.setFont(new Font("Calibri", Font.PLAIN, 15));
 
         JLabel productCategorylbl = new JLabel("Category");
         productCategorylbl.setBounds(30,130,100,25);
@@ -68,7 +91,7 @@ public class AddProductUI {
         String catList[]=categoryServices.getAllCategoryforDropDown();
         JComboBox categoryCb = new JComboBox(catList);
         categoryCb.setBounds(130,133,100,25);
-        categoryCb.setFont(new Font("Calibri", Font.PLAIN, 20));
+        categoryCb.setFont(new Font("Calibri", Font.PLAIN, 15));
 
 
         JLabel barCodeLbl = new JLabel("Bar Code");
@@ -99,42 +122,49 @@ public class AddProductUI {
         JButton editButton = new JButton("Edit");
         editButton.setBounds(160,273,70,30);
 
-        productAddPanel.add(productAddPanel2);
-
         JPanel allProductsPanel = new JPanel();
+        allProductsPanel.setBounds(40,22,500,640);
         allProductsPanel.setBackground(Color.GRAY);
-        allProductsPanel.setBounds(520,20,500,530);
         allProductsPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
         allProductsPanel.setLayout(null);
-
-        JLabel allProductslbl = new JLabel("All Products");
-        allProductslbl.setFont(new Font("Serif", Font.PLAIN, 30));
-        allProductslbl.setBounds(160,5,300,50);
+        allProductsPanel.add(logoLbl);
 
 
+        JPanel productsOptionPnl = new JPanel();
+        productsOptionPnl.setBackground(Color.GRAY);
+        productsOptionPnl.setBounds(550,560,430,100);
+        productsOptionPnl.setBorder(BorderFactory.createLineBorder(Color.black,10));
+        productsOptionPnl.setLayout(new FlowLayout(FlowLayout.CENTER,25,10));
 
-        String[] productColumn = {"Product Id","Product Name","VarientId","Variant","Category","Price","Stock"};
-        String[][] dataFromDatabase = allProductService.getValuesForJTable(productColumn.length);
-        DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
-       JTable productTable = new JTable(productDtm);
-       JScrollPane productSp = new JScrollPane(productTable);
-       productSp.setBounds(10,50,480,475);
+        JButton DeleteButton = new JButton("Delete Product");
+        JButton backBtn = new JButton("Back");
 
-        allProductsPanel.add(productSp);
+         dataFromDatabase = allProductService.getValuesForJTable(productColumn.length);
+         productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
+        productTable = new JTable(productDtm);
+        productSp = new JScrollPane(productTable);
+       productSp.setBounds(10,155,478,473);
+
+
 
         addBtn.addActionListener(e->{
             if((flag==0)){
-                AllProducts allProducts = new AllProducts(productNameTf.getText(),varientCb.getSelectedItem().toString(),categoryCb.getSelectedItem().toString(),Double.valueOf(priceTf.getText()),Integer.valueOf(quantityTf.getText()));
+                AllProducts allProducts = new AllProducts(productNameTf.getText(),varientCb.getSelectedItem().toString()
+                        ,categoryCb.getSelectedItem().toString(),Double.valueOf(priceTf.getText())
+                        ,Integer.valueOf(quantityTf.getText()));
 
-                if(allProductService.checkProductAvailibility(productNameTf.getText())){
+                if(allProductService.checkProductAvailibility(productNameTf.getText(),categoryCb.getSelectedItem().toString(),varientCb.getSelectedItem().toString())){
                     JOptionPane.showMessageDialog(frame, "Product is already available  we have activated!!");
+                    dataFromDatabase = allProductService.getValuesForJTable(productColumn.length);
+                    productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
+                    productTable.setModel(productDtm);
                 }
                 else{
                     if (allProductService.addProductService(allProducts,categoryCb.getSelectedItem().toString(),varientCb.getSelectedItem().toString(),barCodeTf.getText(),Double.valueOf(priceTf.getText()),Double.valueOf(quantityTf.getText()))){
                         JOptionPane.showMessageDialog(frame, "Product saved Successfully");
-                        String[][] dataFromDatabase1 = allProductService.getValuesForJTable(productColumn.length);
-                        DefaultTableModel productDtm2 = new DefaultTableModel(dataFromDatabase1,productColumn);
-                        productTable.setModel(productDtm2);
+                        dataFromDatabase = allProductService.getValuesForJTable(productColumn.length);
+                        productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
+                        productTable.setModel(productDtm);
 
 
                     } else {
@@ -142,15 +172,21 @@ public class AddProductUI {
                     }
 
                 }
+                productNameTf.setText("");
+                barCodeTf.setText("");
+                quantityTf.setText("");
+                priceTf.setText("");
+
+
             }
 
             else {
                 int index=productTable.getSelectedRow();
                 if (allProductService.updateProductService(Integer.valueOf(productDtm.getValueAt(index,0).toString()),productNameTf.getText(),categoryCb.getSelectedItem().toString(),varientCb.getSelectedItem().toString(),barCodeTf.getText(),Double.valueOf(priceTf.getText()),Double.valueOf(quantityTf.getText()))){
                     JOptionPane.showMessageDialog(frame, "Product updated Successfully");
-                    String[][] dataFromDatabase1 = allProductService.getValuesForJTable(productColumn.length);
-                    DefaultTableModel productDtm2 = new DefaultTableModel(dataFromDatabase1,productColumn);
-                    productTable.setModel(productDtm2);
+                   dataFromDatabase = allProductService.getValuesForJTable(productColumn.length);
+                    productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
+                    productTable.setModel(productDtm);
                     flag=0;
 
                 }
@@ -158,17 +194,25 @@ public class AddProductUI {
                     JOptionPane.showMessageDialog(frame, "Product not updated Successfully");
                 }
             }
-
+            productNameTf.setText("");
+            barCodeTf.setText("");
+            quantityTf.setText("");
+            priceTf.setText("");
+            dataFromDatabase = allProductService.getValuesForJTable(productColumn.length);
+            productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
+            productTable.setModel(productDtm);
 
         });
 
         editButton.addActionListener(e->{
-            flag=1;
             int index=productTable.getSelectedRow();
+            flag=1;
+
             if(index<0){
                 JOptionPane.showMessageDialog(frame, "Please select Any product to Edit");
                 return;
             }
+            
             String productName = productDtm.getValueAt(index,1).toString();
             productNameTf.setText(productName);
             String varientName = productDtm.getValueAt(index,3).toString();
@@ -183,20 +227,6 @@ public class AddProductUI {
             quantityTf.setText(quantity);
         });
 
-
-
-
-        allProductsPanel.add(allProductslbl);
-
-        //Bill
-        JPanel productsOptionPnl = new JPanel();
-        productsOptionPnl.setBackground(Color.GRAY);
-        productsOptionPnl.setBounds(520,560,500,100);
-        productsOptionPnl.setBorder(BorderFactory.createLineBorder(Color.black,10));
-        productsOptionPnl.setLayout(new FlowLayout(FlowLayout.CENTER,25,10));
-
-        JButton DeleteButton = new JButton("Delete Product");
-        JButton backBtn = new JButton("Back");
         DeleteButton.addActionListener(e->{
             int index = productTable.getSelectedRow();
             if(index<0){
@@ -204,15 +234,15 @@ public class AddProductUI {
                 return;
             }
             try{
-                String toDeletValue = productTable.getValueAt(index, 1).toString();
+                String productName = productTable.getValueAt(index, 1).toString();
+                String varientName = productTable.getValueAt(index, 3).toString();
+                String categoryName = productTable.getValueAt(index, 4).toString();
 
-                if(!allProductService.deleteProduct(toDeletValue)){
+                if(!allProductService.deleteProduct(productName,varientName,categoryName)){
                     JOptionPane.showMessageDialog(frame,"Deletion of the product is not allowed because it is being used by other categories so we are deactivating it!!");
-
-
                 }
-                DefaultTableModel dtm3 = new DefaultTableModel(allProductService.getValuesForJTable(productColumn.length),productColumn);
-                productTable.setModel(dtm3);
+                 productDtm = new DefaultTableModel(allProductService.getValuesForJTable(productColumn.length),productColumn);
+                productTable.setModel(productDtm);
             } catch (ArrayIndexOutOfBoundsException exc){
                 exc.printStackTrace();
             }
@@ -222,10 +252,25 @@ public class AddProductUI {
             new AdminUI();
             frame.dispose();
         });
-        productsOptionPnl.add(backBtn);
+
+        searchBtn.addActionListener(e->{
+                String[][] searchRecords = allProductService.getBySearch(productColumn.length,searchBarTf.getText());
+                DefaultTableModel dtm2 = new DefaultTableModel(searchRecords,productColumn);
+                productTable.setModel(dtm2);
+                productTable.getColumnModel().getColumn(0).setPreferredWidth(0);
+                productTable.getColumnModel().getColumn(1).setPreferredWidth(25);
+                productTable.getColumnModel().getColumn(3).setPreferredWidth(25);
+
+        });
+        allProductsPanel.add(productSp);
+
         productsOptionPnl.add(DeleteButton);
+        productsOptionPnl.add(backBtn);
 
 
+        allProductsPanel.add(searchBarTf);
+        allProductsPanel.add(searchByBarcode);
+        allProductsPanel.add(searchBtn);
 
         productAddPanel2.add(ProductNamelbl);
         productAddPanel2.add(productNameTf);
@@ -244,9 +289,14 @@ public class AddProductUI {
 
 
 
+
+        ProductAddPanel.add(logoLbl2);
+        ProductAddPanel.add(productAddPanel2);
         frame.add(allProductsPanel);
-        frame.add(productAddPanel);
+        frame.add(ProductAddPanel);
         frame.add(productsOptionPnl);
+
+
 
         frame.setSize(1035,730);
         frame.setLocationRelativeTo(null);

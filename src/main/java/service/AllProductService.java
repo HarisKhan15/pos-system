@@ -14,7 +14,7 @@ public class AllProductService {
         return allProductsRepository.getAllValueForJTable(column);
     }
     public String[][] getValuesForJTable(int column){
-        return allProductsRepository.getAllValueForJtabel(column);
+        return allProductsRepository.getAllValueForProductJtabel(column);
     }
     public String[][] getInventoryForTable(int column){
         return allProductsRepository.getAllValueForInventoryJtabel(column);
@@ -34,8 +34,8 @@ public class AllProductService {
             return false;
         }
     }
-    public  boolean checkProductAvailibility(String productName){
-        if(allProductsRepository.getProductsname(productName)){
+    public  boolean checkProductAvailibility(String productName,String categoryName,String varientName){
+        if(allProductsRepository.getProductsAvailability(productName,categoryName,varientName)){
             return true;
         }
         else{
@@ -60,8 +60,8 @@ public class AllProductService {
     public boolean updateProductService(Integer ProductID,String productName,String categoryName,String varientName,String barcode,Double price,Double quantity){
        return allProductsRepository.updateProduct( ProductID,productName, categoryName, varientName, barcode, price, quantity);
     }
-    public boolean deleteProduct(String prodcutName){
-        return allProductsRepository.deleteProdcutByName(prodcutName);
+    public boolean deleteProduct(String prodcutName,String varientName,String categoryName){
+        return allProductsRepository.deleteProdcutByName(prodcutName,varientName,categoryName);
     }
 }
 
