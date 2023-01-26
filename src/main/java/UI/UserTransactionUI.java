@@ -49,7 +49,7 @@ public class UserTransactionUI {
 
 
         String[] productColumn = {"*","PId","Product Name","VId","Variant","Category","Price","Stock"};
-        String[][] dataFromDatabase = allProductService.getAllValuesForJTable(productColumn.length);
+        String[][] dataFromDatabase = allProductService.getBySearch(productColumn.length,"");
         DefaultTableModel productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
         JTable productTable = new JTable(productDtm);
         JScrollPane productSp = new JScrollPane(productTable);
@@ -195,12 +195,12 @@ public class UserTransactionUI {
                                 cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
                             }
                             amountLbl.setText(cartService.getTotalBill().toString());
-                        } else {
-                            searchByBarcode.setText("");
-                            barcount = 0;
-                            searchByBarcode.requestFocus();
-
                         }
+                    } else {
+                        searchByBarcode.setText("");
+                        barcount = 0;
+                        searchByBarcode.requestFocus();
+
                     }
                 }
 
@@ -208,30 +208,30 @@ public class UserTransactionUI {
         }
         });
 
-        searchByBarcode.addActionListener(e->{
-            AllProducts allProducts = allProductService.getDataByBarcode(searchByBarcode.getText());
-
-            String productId = allProducts.getProductId();
-            String productName = allProducts.getProdctName();
-            String variantId = allProducts.getVariantId();
-            String variantName = allProducts.getVariantName();
-            String productCategory = allProducts.getCategoryName();
-            String unitPrice = allProducts.getPrice();
-            String maxQuantity = allProducts.getQuantity();
-
-            Cart cart = new Cart(productId, productName, variantId, variantName, productCategory, unitPrice, maxQuantity);
-            int x = cartService.checkCart(cart,true);
-            if (x == -1) {
-                CartRepository.addProductIntoCart(cart);
-                cartDtm.addRow(cartService.lastValue());
-            } else if (x == -3) {
-                JOptionPane.showMessageDialog(frame, "Max Quantity");
-            } else {
-                cartDtm.setValueAt(cartService.getUpdatedQuantity(x), x, 4);
-                cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
-            }
-            amountLbl.setText(cartService.getTotalBill().toString());
-        });
+//        searchByBarcode.addActionListener(e->{
+//            AllProducts allProducts = allProductService.getDataByBarcode(searchByBarcode.getText());
+//
+//            String productId = allProducts.getProductId();
+//            String productName = allProducts.getProdctName();
+//            String variantId = allProducts.getVariantId();
+//            String variantName = allProducts.getVariantName();
+//            String productCategory = allProducts.getCategoryName();
+//            String unitPrice = allProducts.getPrice();
+//            String maxQuantity = allProducts.getQuantity();
+//
+//            Cart cart = new Cart(productId, productName, variantId, variantName, productCategory, unitPrice, maxQuantity);
+//            int x = cartService.checkCart(cart,true);
+//            if (x == -1) {
+//                CartRepository.addProductIntoCart(cart);
+//                cartDtm.addRow(cartService.lastValue());
+//            } else if (x == -3) {
+//                JOptionPane.showMessageDialog(frame, "Max Quantity");
+//            } else {
+//                cartDtm.setValueAt(cartService.getUpdatedQuantity(x), x, 4);
+//                cartDtm.setValueAt(cartService.getUpdatedAmount(x), x, 5);
+//            }
+//            amountLbl.setText(cartService.getTotalBill().toString());
+//        });
 
         addProductBtn.addActionListener(e-> {
 

@@ -324,11 +324,11 @@ public class RefundUI {
                             DefaultTableModel dtm2 = new DefaultTableModel(newCartData,cartColumn);
                             cartTable.setModel(dtm2);
                             updatedBillAmountLbl.setText(cartService.getTotalBill().toString());
-                        } else {
-                            searchByBarcode.setText("");
-                            barcount = 0;
-                            searchByBarcode.requestFocus();
                         }
+                    }else {
+                        searchByBarcode.setText("");
+                        barcount = 0;
+                        searchByBarcode.requestFocus();
                     }
                 }
                 return false;

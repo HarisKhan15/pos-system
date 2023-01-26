@@ -1,15 +1,18 @@
 package UI;
 
+import domain.Cart;
 import repository.CartRepository;
 import service.CartService;
 import service.TransactionService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.print.PrinterJob;
 
 public class CompleteTransactionUI {
     TransactionService transactionService = new TransactionService();
     CartService cartService = new CartService();
+
 
 
     public CompleteTransactionUI(Double totalAmount,String userId){
@@ -45,6 +48,7 @@ public class CompleteTransactionUI {
 
             //Entering Items into Database
             cartService.addItemsToDatabase(transactionId);
+            printData();
 
             CartRepository.clearList();
             frame.dispose();
@@ -61,5 +65,22 @@ public class CompleteTransactionUI {
         frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    public void printData(){
+        JTextArea txtArea = new JTextArea();
+        for (Cart c:CartRepository.getAll()) {
+            txtArea.append(c.getProductName()+" "+c.getVariantName()+" "+c.getProductCategory()+" "+c.getQuantity()+" "+c.getAmount()+"\n");
+        }
+        String printData = txtArea.getText();
+        PrinterJob job = PrinterJob.getPrinterJob();
+        boolean doPrint = job.printDialog();
+        if(doPrint){
+            try{
+                job.print();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 }

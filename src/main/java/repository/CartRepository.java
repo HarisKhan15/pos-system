@@ -119,11 +119,10 @@ public class CartRepository extends BaseConnection{
     public void updateTransaction(String userId,int transactionId,Double amount){
         try{
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("update transactions set userId = ? ,transactionDate = ?,totalAmount = ? where transactionId = ?;");
+            PreparedStatement stmt = conn.prepareStatement("update transactions set userId = ? ,totalAmount = ? where transactionId = ?;");
             stmt.setString(1,userId);
-            stmt.setDate(2,Date.valueOf(LocalDate.now()));
-            stmt.setDouble(3,amount);
-            stmt.setInt(4, transactionId);
+            stmt.setDouble(2,amount);
+            stmt.setInt(3, transactionId);
             stmt.executeUpdate();
         }catch (Exception e){
             e.printStackTrace();

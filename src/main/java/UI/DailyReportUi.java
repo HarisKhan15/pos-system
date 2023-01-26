@@ -6,9 +6,7 @@ import service.UserService;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.concurrent.atomic.AtomicReference;
+import java.text.MessageFormat;
 
 public class DailyReportUi {
 
@@ -16,6 +14,10 @@ public class DailyReportUi {
 
     DailyReportServices transactionServices = new DailyReportServices();
     UserService authenticationSerivice = new UserService();
+
+    public static void main(String[] args) {
+        new DailyReportUi();
+    }
     public DailyReportUi() {
         JFrame frame = new JFrame("Daily Report");
 
@@ -45,6 +47,10 @@ public class DailyReportUi {
         JButton userReportBtn = new JButton("See Report");
         userReportBtn.setFont(new Font("Calibri", Font.BOLD, 15));
         userReportBtn.setBounds(840,200,130,30);
+
+        JButton printReportBtn = new JButton("Print Report");
+        printReportBtn.setFont(new Font("Calibri", Font.BOLD, 15));
+        printReportBtn.setBounds(840,250,130,30);
 
         String[] DailyReportColumns = {"Transaction ID","UserID","Transaction Date","Total Amount"};;
 
@@ -89,6 +95,17 @@ public class DailyReportUi {
             dailyReportTable.setModel(dtm2);
             totalBillAmountLbl.setText(transactionServices.getUserProfit(comboBox.getSelectedItem().toString()).toString());
         });
+        printReportBtn.addActionListener(e->{
+            MessageFormat header = new MessageFormat("Daily Report ");
+            MessageFormat footer = new MessageFormat("Footer");
+            dailyReportDtm.addRow(new String[]{"","","Total Bill : ",totalBillAmountLbl.getText()});
+            try{
+                dailyReportTable.print(JTable.PrintMode.NORMAL,header,footer);
+            }catch (Exception a){
+                a.printStackTrace();
+            }
+            dailyReportDtm.removeRow(dailyReportTable.getRowCount()-1);
+        });
 
         DailyReportPanel.add(totalProfitLbl);
         DailyReportPanel.add(totalBillAmountLbl);
@@ -100,6 +117,7 @@ public class DailyReportUi {
         DailyReportPanel.setBorder(BorderFactory.createLineBorder(Color.black,10));
         DailyReportPanel.setLayout(null);
 
+        frame.add(printReportBtn);
         frame.add(userReportBtn);
         frame.add(dropdownlbl);
         frame.add(comboBox);
