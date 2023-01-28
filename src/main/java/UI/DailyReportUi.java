@@ -33,8 +33,11 @@ public class DailyReportUi {
 
         JLabel dailyReportlogolbl= new JLabel("Daily Report");
         dailyReportlogolbl.setFont(new Font("Calibri", Font.PLAIN, 50));
-        dailyReportlogolbl.setBounds(180,30,400,50);
+        dailyReportlogolbl.setBounds(180,20,400,50);
         dailyReportlogolbl.setForeground(Color.orange);
+
+        JTextField searchBarTf = new JTextField();
+        searchBarTf.setBounds(100, 75,250,20);
 
         JLabel dropdownlbl = new JLabel("See Report Of Users");
         dropdownlbl.setFont(new Font("Calibri", Font.BOLD, 15));
@@ -52,24 +55,24 @@ public class DailyReportUi {
         printReportBtn.setFont(new Font("Calibri", Font.BOLD, 15));
         printReportBtn.setBounds(840,250,130,30);
 
-        String[] DailyReportColumns = {"Transaction ID","UserID","Transaction Date","Total Amount"};;
+        String[] DailyReportColumns = {"Transaction ID","Cashier Id","Transaction Date","Total Amount"};;
 
         String[][] data = transactionServices.getDataForTable();
 
         DefaultTableModel dailyReportDtm = new DefaultTableModel(data, DailyReportColumns);
         JTable dailyReportTable = new JTable(dailyReportDtm);
         JScrollPane dailyReportSp = new JScrollPane(dailyReportTable);
-        dailyReportSp.setBounds(40, 90, 520, 450);
+        dailyReportSp.setBounds(40, 115, 520, 450);
 
         JButton openTransactionBtn = new JButton("Open");
-        openTransactionBtn.setBounds(140,570,100,30);
+        openTransactionBtn.setBounds(140,580,100,30);
 
         JLabel totalProfitLbl = new JLabel("Total Profit : ");
-        totalProfitLbl.setBounds(250,570,150,20);
+        totalProfitLbl.setBounds(250,580,150,20);
         totalProfitLbl.setFont(new Font("Serif", Font.PLAIN, 20));
 
         JLabel totalBillAmountLbl = new JLabel(transactionServices.getDailyProfit().toString());
-        totalBillAmountLbl.setBounds(360,570,150,25);
+        totalBillAmountLbl.setBounds(360,580,150,25);
         totalBillAmountLbl.setFont(new Font("Serif", Font.PLAIN, 20));
         totalBillAmountLbl.setBorder(BorderFactory.createLineBorder(Color.black,2));
         totalBillAmountLbl.setBackground(Color.WHITE);
@@ -97,16 +100,17 @@ public class DailyReportUi {
         });
         printReportBtn.addActionListener(e->{
             MessageFormat header = new MessageFormat("Daily Report ");
-            MessageFormat footer = new MessageFormat("Footer");
+            MessageFormat footer = new MessageFormat("Powered By StepWay");
             dailyReportDtm.addRow(new String[]{"","","Total Bill : ",totalBillAmountLbl.getText()});
             try{
-                dailyReportTable.print(JTable.PrintMode.NORMAL,header,footer);
+                dailyReportTable.print(JTable.PrintMode.FIT_WIDTH,header,footer);
             }catch (Exception a){
                 a.printStackTrace();
             }
             dailyReportDtm.removeRow(dailyReportTable.getRowCount()-1);
         });
 
+        DailyReportPanel.add(searchBarTf);
         DailyReportPanel.add(totalProfitLbl);
         DailyReportPanel.add(totalBillAmountLbl);
         DailyReportPanel.add(openTransactionBtn);

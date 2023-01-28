@@ -10,6 +10,9 @@ public class DailyReportServices {
     public Double getUserProfit(String name){
         return transactionRepository.totalDailyProfitByUser(name);
     }
+    public Double getAllTransactionReportUserProfit(String name){
+        return transactionRepository.totalTransactionProfitByUser(name);
+    }
     public Double getProfitPerTransaction(int transactionId){
         return transactionRepository.getProfitPerTransaction(transactionId);
     }

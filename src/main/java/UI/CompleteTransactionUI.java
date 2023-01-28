@@ -41,14 +41,13 @@ public class CompleteTransactionUI {
                 JOptionPane.showMessageDialog(frame,"Received amount is less than the total bill");
                 return;
             }
-            JOptionPane.showMessageDialog(frame,"Transaction Completed \n Returned Amount : "+(Double.parseDouble(receivedAmountTf.getText())-totalAmount)+" Rs");
 
             //Entering Transaction Data into Transaction Table and getting Its id
             int transactionId = transactionService.transactionEnterIntoDatabaseAndGetId(userId,totalAmount);
 
             //Entering Items into Database
             cartService.addItemsToDatabase(transactionId);
-            printData();
+            cartService.doPrint(Double.valueOf(receivedAmountTf.getText()));
 
             CartRepository.clearList();
             frame.dispose();

@@ -18,6 +18,12 @@ public class UserService {
     public String[][] getreportofUser(String userId){
         return userRepository.getAllValueOfUserForJtabel(userId);
     }
+    public String[][] getALLReportOfUser(String userId,String month){
+        return userRepository.getAllReportOfUserForJTable(userId,month);
+    }
+    public String[][] getALLTransactionReportOfMonthly(String month){
+        return userRepository.getAllTransactionReportMonthlyForJTable(month);
+    }
 
     public String[][] getAllusersforJtable(int columnSize){
         return userRepository.getAllUsersToDelete(columnSize);

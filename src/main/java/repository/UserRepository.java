@@ -93,6 +93,62 @@ public class UserRepository extends BaseConnection{
         }
 
 
+
+        String[][] result = new String[transactionListOfUSer.size()][4];
+        for (int i = 0; i < transactionListOfUSer.size(); i++) {
+            result[i][0] = transactionListOfUSer.get(i).getTransactionId().toString();
+            result[i][1] = transactionListOfUSer.get(i).getUserId();
+            result[i][2] = formatter.format(transactionListOfUSer.get(i).getTransactionDate());
+            result[i][3] = transactionListOfUSer.get(i).getAmount().toString();
+        }
+        return result;
+
+    }
+    public String[][] getAllReportOfUserForJTable(String userId,String month) {
+        ArrayList<Transactions> transactionListOfUSer = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select * from transactions where monthname(transactionDate) like ? and userId = ?;");
+            stmt.setString(1, "%"+month+"%");
+            stmt.setString(2, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                transactionListOfUSer.add(new Transactions(rs.getInt("transactionId"), rs.getString("userId"), rs.getDate("transactionDate"), rs.getDouble("totalAmount")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+        String[][] result = new String[transactionListOfUSer.size()][4];
+        for (int i = 0; i < transactionListOfUSer.size(); i++) {
+            result[i][0] = transactionListOfUSer.get(i).getTransactionId().toString();
+            result[i][1] = transactionListOfUSer.get(i).getUserId();
+            result[i][2] = formatter.format(transactionListOfUSer.get(i).getTransactionDate());
+            result[i][3] = transactionListOfUSer.get(i).getAmount().toString();
+        }
+        return result;
+
+    }
+    public String[][] getAllTransactionReportMonthlyForJTable(String month) {
+        ArrayList<Transactions> transactionListOfUSer = new ArrayList<>();
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select * from transactions where monthname(transactionDate) like ?;");
+            stmt.setString(1, "%"+month+"%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                transactionListOfUSer.add(new Transactions(rs.getInt("transactionId"), rs.getString("userId"), rs.getDate("transactionDate"), rs.getDouble("totalAmount")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
         String[][] result = new String[transactionListOfUSer.size()][4];
         for (int i = 0; i < transactionListOfUSer.size(); i++) {
             result[i][0] = transactionListOfUSer.get(i).getTransactionId().toString();
