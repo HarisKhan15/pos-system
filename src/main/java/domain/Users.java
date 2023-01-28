@@ -15,13 +15,11 @@ public class Users {
         this.userDesignation = userDesignation;
         this.userEmail = userEmail;
     }
-    public Users(String userId, String userPass, String userName, String userDesignation, String userEmail,String availabilty) {
+    public Users(String userId, String userName, String userDesignation, String userEmail) {
         this.userId = userId;
-        this.userPass = userPass;
         this.userName = userName;
         this.userDesignation = userDesignation;
         this.userEmail = userEmail;
-        this.availabilty = availabilty;
     }
 
     public String getAvailabilty() {

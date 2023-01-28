@@ -184,7 +184,7 @@ public class AddProductUI {
                 int index=productTable.getSelectedRow();
                 if (allProductService.updateProductService(Integer.valueOf(productDtm.getValueAt(index,0).toString()),productNameTf.getText(),categoryCb.getSelectedItem().toString(),varientCb.getSelectedItem().toString(),barCodeTf.getText(),Double.valueOf(priceTf.getText()),Double.valueOf(quantityTf.getText()))){
                     JOptionPane.showMessageDialog(frame, "Product updated Successfully");
-                   dataFromDatabase = allProductService.getValuesForJTable(productColumn.length);
+                    dataFromDatabase = allProductService.getValuesForJTable(productColumn.length);
                     productDtm = new DefaultTableModel(dataFromDatabase,productColumn);
                     productTable.setModel(productDtm);
                     flag=0;

@@ -159,53 +159,40 @@ public class UserRepository extends BaseConnection{
         return result;
 
     }
-    public String[][] getAllUsersToDelete(int columnSize) {
+    public String[][] getAllUsers(int columnSize) {
         ArrayList<Users> list = new ArrayList<>();
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
             PreparedStatement stmt = conn.prepareStatement("Select * from users where avalaibilty='active'");
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                list.add(new Users(rs.getString("UserId"),rs.getString("UserPass"), rs.getString("userName"),rs.getString("userDesignation"),rs.getString("userEmail"),rs.getString("avalaibilty")));
+                list.add(new Users(rs.getString("UserId"),rs.getString("userName"),rs.getString("userDesignation"),rs.getString("userEmail")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        String[][] result = new String[list.size()][6];
+        String[][] result = new String[list.size()][4];
         for (int i = 0; i < list.size(); i++) {
             result[i][0]=list.get(i).getUserId();
-            result[i][1]=list.get(i).getUserPass();
-            result[i][2]=list.get(i).getUserName();
-            result[i][3]=list.get(i).getUserDesignation();
-            result[i][4]=list.get(i).getUserEmail();
-            result[i][5]=list.get(i).getAvailabilty();
+            result[i][1]=list.get(i).getUserName();
+            result[i][2]=list.get(i).getUserDesignation();
+            result[i][3]=list.get(i).getUserEmail();
         }
         return result;
 
     }
-    public boolean deleteUserByName(String UserName) {
+    public boolean deleteUserById(String UserId) {
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM users WHERE UserName=(?)");
-            stmt.setString(1,UserName.toString());
+            PreparedStatement stmt = conn.prepareStatement("update users set avalaibilty ='inactive' WHERE userId=(?)");
+            stmt.setString(1,UserId.toString());
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            updateUserAvailibility(UserName);
             return false;
         }
+    }
 
-    }
-    public void updateUserAvailibility(String UserName){
-        try{
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            PreparedStatement stmt = conn.prepareStatement("UPDATE users SET avalaibilty='inactive' WHERE UserName=(?)");
-            stmt.setString(1,UserName);
-            stmt.executeUpdate();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
     public Boolean getUserName(String userId){
         boolean flag=false;
         try {
@@ -228,4 +215,38 @@ public class UserRepository extends BaseConnection{
             return false;
         }
     }
-}
+
+    public String getUserPassword(String userId) {
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("select userPass from users where userId = ?;");
+            stmt.setString(1,userId);
+            ResultSet rs = stmt.executeQuery();
+            String userPassword = null;
+            while(rs.next()){
+                userPassword= rs.getString("userPass");
+            }
+            return userPassword;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+    public boolean updateUser(String userId,String userPassword,String userName,String userEmail, String userDesignation){
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            PreparedStatement stmt = conn.prepareStatement("update users set userPass=(?),userName=(?),userDesignation=(?),userEmail=(?) where userId=(?)");
+            stmt.setString(1,userPassword);
+            stmt.setString(2,userName);
+            stmt.setString(3,userDesignation);
+            stmt.setString(4,userEmail);
+            stmt.setString(5,userId);
+            stmt.executeUpdate();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    }
+
